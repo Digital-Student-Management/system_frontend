@@ -1,0 +1,75 @@
+// =============================================================================
+// _variables.scss — Sistema de diseño del GED
+// Todos los valores de diseño centralizados aquí.
+// Cambiar una variable actualiza el valor en toda la interfaz.
+// =============================================================================
+
+// ---------------------------------------------------------------------------
+// Paleta de colores principal
+// ---------------------------------------------------------------------------
+// Colores primarios (definir según identidad visual del establecimiento)
+$color-primario:        #2563EB;   // Azul institucional
+$color-primario-dark:   #1D4ED8;
+$color-primario-light:  #93C5FD;
+
+// Colores secundarios
+$color-secundario:      #0EA5E9;
+$color-exito:           #16A34A;
+$color-advertencia:     #CA8A04;
+$color-error:           #DC2626;
+$color-info:            #0284C7;
+
+// Fondos
+$color-fondo:           #F8FAFC;
+$color-fondo-alt:       #F1F5F9;
+$color-fondo-dark:      #1E293B;
+
+// Textos
+$color-texto:           #0F172A;
+$color-texto-suave:     #64748B;
+$color-blanco:          #FFFFFF;
+
+// Bordes
+$color-borde:           #E2E8F0;
+$color-borde-fuerte:    #CBD5E1;
+
+// ---------------------------------------------------------------------------
+// Tipografías
+// ---------------------------------------------------------------------------
+$font-display: 'Inter', system-ui, sans-serif;
+$font-body:    'Inter', system-ui, sans-serif;
+$font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+// ---------------------------------------------------------------------------
+// Espaciado (escala de 8px)
+// ---------------------------------------------------------------------------
+$spacing-xs:  4px;
+$spacing-sm:  8px;
+$spacing-md:  16px;
+$spacing-lg:  24px;
+$spacing-xl:  40px;
+$spacing-xxl: 64px;
+
+// ---------------------------------------------------------------------------
+// Bordes y radios
+// ---------------------------------------------------------------------------
+$radius-sm:   4px;
+$radius-md:   8px;
+$radius-lg:   12px;
+$radius-xl:   16px;
+$radius-full: 9999px;
+
+// ---------------------------------------------------------------------------
+// Sombras
+// ---------------------------------------------------------------------------
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+$shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+// ---------------------------------------------------------------------------
+// Layout
+// ---------------------------------------------------------------------------
+$max-width:       1280px;
+$sidebar-width:   260px;
+$navbar-height:   64px;
+$transition:      all 0.2s ease;

@@ -1,0 +1,166 @@
+// =============================================================================
+// _mixins.scss — Funciones reutilizables de CSS
+// Usa @include nombre-del-mixin; donde lo necesites.
+// =============================================================================
+@use 'variables' as *;
+@use 'sass:color';
+
+// ---------------------------------------------------------------------------
+// Layout
+// ---------------------------------------------------------------------------
+
+// Centra contenido horizontal y verticalmente (flexbox)
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flex en fila con items alineados verticalmente
+@mixin flex-row($gap: $spacing-md) {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+}
+
+// Flex en columna
+@mixin flex-col($gap: $spacing-md) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Contenedor de ancho máximo centrado
+@mixin container {
+  width: 100%;
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+}
+
+// Padding estándar de sección
+@mixin section-padding {
+  padding: $spacing-xxl 0;
+}
+
+// ---------------------------------------------------------------------------
+// Formularios
+// ---------------------------------------------------------------------------
+
+// Estilos base de input/select/textarea
+@mixin form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid $color-borde;
+  border-radius: $radius-md;
+  font-family: $font-body;
+  font-size: 0.95rem;
+  color: $color-texto;
+  background: $color-blanco;
+  transition: $transition;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primario;
+    box-shadow: 0 0 0 3px rgba($color-primario, 0.12);
+  }
+
+  &:disabled {
+    background: $color-fondo-alt;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &.error {
+    border-color: $color-error;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Botones
+// ---------------------------------------------------------------------------
+
+@mixin btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: 9px 20px;
+  border-radius: $radius-md;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: $font-body;
+  transition: $transition;
+  cursor: pointer;
+  border: 2px solid transparent;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+@mixin btn-primary {
+  @include btn-base;
+  background-color: $color-primario;
+  color: $color-blanco;
+  border-color: $color-primario;
+
+  &:hover:not(:disabled) { background-color: $color-primario-dark; border-color: $color-primario-dark; }
+}
+
+@mixin btn-secondary {
+  @include btn-base;
+  background-color: transparent;
+  color: $color-primario;
+  border-color: $color-primario;
+
+  &:hover:not(:disabled) { background-color: $color-primario; color: $color-blanco; }
+}
+
+@mixin btn-danger {
+  @include btn-base;
+  background-color: $color-error;
+  color: $color-blanco;
+  border-color: $color-error;
+
+  &:hover:not(:disabled) { background-color: color.adjust($color-error, $lightness: -8%); }
+}
+
+@mixin btn-ghost {
+  @include btn-base;
+  background-color: transparent;
+  color: $color-texto-suave;
+  border-color: $color-borde;
+
+  &:hover:not(:disabled) { background-color: $color-fondo-alt; }
+}
+
+// ---------------------------------------------------------------------------
+// Breakpoints responsive
+// ---------------------------------------------------------------------------
+
+@mixin mobile  { @media (max-width: 480px)  { @content; } }
+@mixin tablet  { @media (max-width: 768px)  { @content; } }
+@mixin laptop  { @media (max-width: 1024px) { @content; } }
+@mixin desktop { @media (min-width: 1025px) { @content; } }
+
+// ---------------------------------------------------------------------------
+// Utilitarios
+// ---------------------------------------------------------------------------
+
+// Texto que desborda se corta con ellipsis
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Tarjeta base con sombra y borde
+@mixin card {
+  background: $color-blanco;
+  border: 1px solid $color-borde;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}

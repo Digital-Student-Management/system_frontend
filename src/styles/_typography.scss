@@ -1,0 +1,41 @@
+// =============================================================================
+// _typography.scss — Estilos base de textos
+// =============================================================================
+@use 'variables' as *;
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-display;
+  font-weight: 700;
+  line-height: 1.25;
+  color: $color-texto;
+}
+
+h1 { font-size: clamp(1.75rem, 3vw, 2.5rem); }
+h2 { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.1rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; }
+
+p {
+  line-height: 1.7;
+  color: $color-texto-suave;
+}
+
+small {
+  font-size: 0.8rem;
+  color: $color-texto-suave;
+}
+
+strong {
+  font-weight: 700;
+  color: $color-texto;
+}
+
+code {
+  font-family: $font-mono;
+  font-size: 0.875rem;
+  background: $color-fondo-alt;
+  padding: 2px 6px;
+  border-radius: $radius-sm;
+}
