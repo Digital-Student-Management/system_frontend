@@ -1,0 +1,361 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.dashboard-layout {
+  min-height: 100vh;
+  background-color: $color-fondo;
+  display: flex;
+  flex-direction: column;
+}
+
+// Navbar Superior
+.dashboard-navbar {
+  height: $navbar-height;
+  background-color: $color-blanco;
+  border-bottom: 1px solid $color-borde;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $spacing-lg;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: $shadow-sm;
+
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    .logo-icon {
+      font-size: 1.8rem;
+      color: $color-primario;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-text {
+      font-family: $font-display;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: $color-primario;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  .navbar-user-section {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .user-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: $color-texto;
+      }
+
+      .user-role-badge {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: $radius-full;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-top: 2px;
+
+        &.estudiante { background-color: rgba($color-secundario, 0.15); color: $color-secundario; }
+        &.docente { background-color: rgba($color-primario, 0.15); color: $color-primario; }
+        &.apoderado { background-color: rgba($color-exito, 0.15); color: $color-exito; }
+        &.inspector { background-color: rgba($color-advertencia, 0.15); color: $color-advertencia; }
+        &.directivo { background-color: rgba(139, 92, 246, 0.15); color: rgb(109, 40, 217); } // Violeta
+        &.funcionario { background-color: rgba(236, 72, 153, 0.15); color: rgb(190, 24, 74); } // Rosa
+        &.admin { background-color: rgba($color-error, 0.15); color: $color-error; }
+      }
+    }
+
+    .btn-logout {
+      @include btn-ghost;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      span {
+        @include tablet {
+          display: none; // Ocultar texto en móviles/tablets
+        }
+      }
+    }
+  }
+}
+
+// Contenido Principal
+.dashboard-main {
+  @include container;
+  padding-top: $spacing-lg;
+  padding-bottom: $spacing-xl;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+// Banner de Bienvenida
+.dashboard-header-banner {
+  background: linear-gradient(135deg, $color-primario-dark 0%, $color-primario 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg $spacing-xl;
+  color: $color-blanco;
+  box-shadow: $shadow-md;
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-family: $font-display;
+    color: $color-blanco;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: rgba($color-blanco, 0.9);
+  }
+}
+
+// Contenido del Dashboard de Rol
+.role-dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $color-texto;
+    font-family: $font-display;
+  }
+}
+
+// Grid de Tarjetas de Estadísticas
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: $spacing-md;
+}
+
+// Tarjeta genérica de widget
+.widget-card {
+  @include card;
+  padding: $spacing-lg;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $color-texto-suave;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: $spacing-md;
+  }
+}
+
+// Tarjetas de Estadísticas Grandes
+.stats-card {
+  .big-stat {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: $color-primario;
+    line-height: 1;
+    margin-bottom: $spacing-sm;
+
+    &.positive { color: $color-exito; }
+    &.warning { color: $color-advertencia; }
+    &.error { color: $color-error; }
+    &.info { color: $color-info; }
+  }
+
+  .stat-sub {
+    font-size: 0.8rem;
+    color: $color-texto-suave;
+  }
+}
+
+// Perfil de Alumno (Apoderado)
+.student-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  background-color: $color-blanco;
+  border: 1px solid $color-borde;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  box-shadow: $shadow-sm;
+
+  .student-avatar {
+    font-size: 2.2rem;
+    background: $color-fondo-alt;
+    width: 60px;
+    height: 60px;
+    border-radius: $radius-full;
+    @include flex-center;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $color-texto;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: $color-texto-suave;
+  }
+}
+
+// Sección de Gráficos y Listas
+.dashboard-charts-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: $spacing-lg;
+
+  @include laptop {
+    grid-template-columns: 1fr; // Apilado en pantallas pequeñas
+  }
+}
+
+.chart-wrapper {
+  @include card;
+  padding: $spacing-lg;
+
+  h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $color-texto-suave;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: $spacing-md;
+  }
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+// Listas dentro de tarjetas
+.dashboard-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-md;
+    padding: $spacing-sm 0;
+    border-bottom: 1px solid $color-fondo-alt;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    svg {
+      color: $color-primario;
+      font-size: 1.2rem;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      strong {
+        font-size: 0.9rem;
+        color: $color-texto;
+        font-weight: 600;
+      }
+
+      span {
+        font-size: 0.8rem;
+        color: $color-texto-suave;
+      }
+    }
+
+    &.warning-border {
+      border-left: 3px solid $color-advertencia;
+      padding-left: $spacing-sm;
+    }
+  }
+
+  &.interactive {
+    li.clickable {
+      cursor: pointer;
+      transition: $transition;
+      border-radius: $radius-sm;
+      padding: $spacing-sm;
+
+      &:hover {
+        background-color: $color-fondo-alt;
+        padding-left: 12px;
+      }
+    }
+  }
+}
+
+// Leyenda del gráfico circular
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-lg;
+  margin-top: $spacing-sm;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+
+      &.primary { background-color: $color-primario; }
+      &.danger { background-color: $color-error; }
+    }
+  }
+}
+
+// Clases de Animación
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
