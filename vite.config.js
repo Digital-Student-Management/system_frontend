@@ -18,7 +18,7 @@ export default defineConfig({
       // Así evitas CORS sin tocar el backend: el navegador cree que habla
       // con el mismo servidor (localhost:5173) y Vite lo redirige internamente.
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8089',
         changeOrigin: true
       }
     }

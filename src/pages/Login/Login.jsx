@@ -6,12 +6,8 @@ import { FiMail, FiLock, FiUser, FiInfo, FiArrowLeft, FiEdit3 } from 'react-icon
 import { FaSchool } from 'react-icons/fa'
 import { useAuth } from '../../hooks/useAuth'
 import { reglasRut, formatearRut } from '../../validators/rutValidators'
-import {
-  reglasEmail,
-  reglasPasswordLogin,
-  reglasPasswordCrear,
-  reglasConfirmPassword
-} from '../../validators/fieldValidators'
+import { reglasEmail, reglasPasswordLogin, reglasPasswordCrear, reglasConfirmPassword } from '../../validators/fieldValidators'
+import { login as apiLogin, registerUser } from '../../services/authService'
 import './Login.scss'
 
 export default function Login() {
@@ -56,39 +52,71 @@ export default function Login() {
     setValue('rut', formatearRut(rawValue), { shouldValidate: true })
   }
 
-  // Submit del formulario (maneja login y registro simulados)
+  // Submit del formulario (maneja login y registro contra API con fallback simulado)
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
-      // Simula retraso de red
-      await new Promise((resolve) => setTimeout(resolve, 800))
-
       if (isRegistering) {
-        // Simulación de Registro
-        console.log('Registro exitoso de usuario:', data)
-        toast.success(`¡Registro exitoso! Usuario con RUT ${data.rut} registrado como ${data.rol}. Ya puedes iniciar sesión.`)
-        setIsRegistering(false)
-        reset()
-      } else {
-        // Simulación de Login
-        const selectedRole = data.bypassRole || 'DOCENTE'
-
-        const mockUser = {
-          rut: loginMethod === 'rut' ? data.rut : '19.876.543-K',
-          nombre: `Usuario Demostración (${selectedRole})`,
-          email: loginMethod === 'email' ? data.email : 'contacto@colegio.cl',
-          rol: selectedRole
+        // Datos de registro para enviar
+        const registerData = {
+          nombreCompleto: data.nombreCompleto,
+          rut: data.rut,
+          email: data.email,
+          password: data.password,
+          rol: data.rol
         }
 
-        login('mock-jwt-token-dev-purposes-only', mockUser)
-        toast.success(`¡Bienvenido(a), ${mockUser.nombre}!`)
+        try {
+          const response = await registerUser(registerData)
+          const registered = response.data.user || response.data
+          toast.success(`¡Registro exitoso en MySQL! Usuario creado como ${registered.rol || data.rol}. Ya puedes ingresar.`)
+          setIsRegistering(false)
+          reset()
+        } catch (apiError) {
+          console.warn('API Register falló, usando simulación local:', apiError)
+          toast.success(`[Modo Simulado] ¡Registro exitoso! Usuario con RUT ${data.rut} registrado como ${data.rol}.`)
+          setIsRegistering(false)
+          reset()
+        }
+      } else {
+        // Datos de inicio de sesión para enviar
+        const loginData = {
+          rut: loginMethod === 'rut' ? data.rut : '',
+          email: loginMethod === 'email' ? data.email : '',
+          password: data.password
+        }
 
-        const from = location.state?.from?.pathname || '/'
-        navigate(from, { replace: true })
+        try {
+          const response = await apiLogin(loginData)
+          const { token, user } = response.data
+          
+          login(token, user)
+          toast.success(`¡Bienvenido(a) (Autenticado en MySQL), ${user.nombre}!`)
+          
+          const from = location.state?.from?.pathname || '/'
+          navigate(from, { replace: true })
+        } catch (apiError) {
+          console.warn('API Login falló, usando bypass de desarrollo:', apiError)
+          
+          // Fallback a simulación
+          const selectedRole = data.bypassRole || 'DOCENTE'
+          const mockUser = {
+            rut: loginMethod === 'rut' ? data.rut : '19.876.543-K',
+            nombre: `Usuario Simulado (${selectedRole})`,
+            email: loginMethod === 'email' ? data.email : 'contacto@colegio.cl',
+            rol: selectedRole
+          }
+
+          login('mock-jwt-token-dev-purposes-only', mockUser)
+          toast.info(`[Modo Simulado] Bienvenido(a), ${mockUser.nombre}`)
+          
+          const from = location.state?.from?.pathname || '/'
+          navigate(from, { replace: true })
+        }
       }
     } catch (error) {
       console.error('Auth error:', error)
-      toast.error('Ocurrió un error. Intente nuevamente.')
+      toast.error('Ocurrió un error inesperado.')
     } finally {
       setIsLoading(false)
     }

@@ -9,3 +9,4 @@ export const login         = (credentials) => api.post('/auth/login', credential
 export const logout        = ()             => api.post('/auth/logout')
 export const refreshToken  = ()             => api.post('/auth/refresh')
 export const changePassword = (data)        => api.put('/auth/change-password', data)
+export const registerUser  = (data)        => api.post('/auth/register', data)
