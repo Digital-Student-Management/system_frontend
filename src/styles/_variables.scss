@@ -73,3 +73,10 @@ $max-width:       1280px;
 $sidebar-width:   260px;
 $navbar-height:   64px;
 $transition:      all 0.2s ease;
+$transition-fast: all 0.1s ease;
+
+// Aliases para compatibilidad de componentes
+$color-texto-mutado: $color-texto-suave;
+$color-texto-oscuro: $color-texto;
+$color-peligro:      $color-error;
+$color-alerta:       $color-advertencia;

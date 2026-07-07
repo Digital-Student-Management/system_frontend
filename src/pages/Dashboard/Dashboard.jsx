@@ -1,5 +1,6 @@
 import { useAuth } from '../../hooks/useAuth'
 import { FaSchool } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 import {
   FiLogOut,
   FiUser,
@@ -7,7 +8,8 @@ import {
   FiCalendar,
   FiFileText,
   FiUsers,
-  FiAlertCircle
+  FiAlertCircle,
+  FiAward
 } from 'react-icons/fi'
 import {
   BarChart,
@@ -384,6 +386,21 @@ export default function Dashboard() {
           <span className="logo-icon"><FaSchool /></span>
           <span className="logo-text">Colegio Bernardo O'Higgins</span>
         </div>
+
+        <div className="navbar-menu-links">
+          <Link to="/" className="nav-link active">Inicio</Link>
+          {(usuario.rol === 'DOCENTE' || usuario.rol === 'ADMIN') && (
+            <Link to="/registro-notas" className="nav-link">
+              <FiBookOpen /> Registrar Notas
+            </Link>
+          )}
+          {(usuario.rol === 'ESTUDIANTE' || usuario.rol === 'APODERADO' || usuario.rol === 'ADMIN') && (
+            <Link to="/mis-notas" className="nav-link">
+              <FiAward /> Mis Notas
+            </Link>
+          )}
+        </div>
+
         <div className="navbar-user-section">
           <div className="user-info">
             <span className="user-name">{usuario.nombre}</span>

@@ -52,7 +52,7 @@ export default function Login() {
     setValue('rut', formatearRut(rawValue), { shouldValidate: true })
   }
 
-  // Submit del formulario (maneja login y registro contra API con fallback simulado)
+  // Submit del formulario (maneja login y registro contra API con fallback simulado para pruebas locales)
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
@@ -73,7 +73,7 @@ export default function Login() {
           setIsRegistering(false)
           reset()
         } catch (apiError) {
-          console.warn('API Register falló, usando simulación local:', apiError)
+          console.warn('API Register falló, usando simulación local para pruebas:', apiError)
           toast.success(`[Modo Simulado] ¡Registro exitoso! Usuario con RUT ${data.rut} registrado como ${data.rol}.`)
           setIsRegistering(false)
           reset()

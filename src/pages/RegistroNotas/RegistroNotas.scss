@@ -1,0 +1,475 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.notas-container {
+  padding: $spacing-xl;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+
+  .notas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .icon-title {
+        font-size: 2.2rem;
+        color: $color-primario;
+      }
+
+      h1 {
+        font-family: $font-display;
+        font-size: 2rem;
+        font-weight: 800;
+        color: $color-texto-oscuro;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: $color-texto-mutado;
+      }
+    }
+  }
+
+  // Panel de Selectores
+  .notas-selectors-panel {
+    background-color: $color-blanco;
+    border-radius: $radius-lg;
+    padding: $spacing-lg $spacing-xl;
+    box-shadow: $shadow-sm;
+    border: 1px solid $color-borde;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-lg;
+
+    .selector-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $color-texto-oscuro;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      select {
+        padding: 10px 14px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        background-color: $color-fondo;
+        color: $color-texto-oscuro;
+        font-size: 0.95rem;
+        font-family: inherit;
+        outline: none;
+        transition: border-color $transition-fast, box-shadow $transition-fast;
+
+        &:focus {
+          border-color: $color-primario;
+          box-shadow: 0 0 0 3px rgba($color-primario, 0.12);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+
+      .eval-select-wrapper {
+        display: flex;
+        gap: 8px;
+
+        select {
+          flex: 1;
+        }
+
+        .btn-add-eval {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 42px;
+          height: 42px;
+          border-radius: $radius-md;
+          border: none;
+          background-color: $color-primario;
+          color: $color-blanco;
+          font-size: 1.2rem;
+          cursor: pointer;
+          transition: background-color $transition-fast, transform $transition-fast;
+
+          &:hover:not(:disabled) {
+            background-color: $color-primario-dark;
+            transform: translateY(-1px);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+        }
+      }
+    }
+  }
+
+  // Formulario Planificar Evaluación
+  .crear-eval-form {
+    background-color: rgba($color-primario, 0.03);
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+    border: 1px dashed rgba($color-primario, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    h3 {
+      font-family: $font-display;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: $color-primario;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      align-items: flex-end;
+      gap: $spacing-md;
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: $color-texto-oscuro;
+        }
+
+        input {
+          padding: 10px 14px;
+          border-radius: $radius-md;
+          border: 1px solid $color-borde;
+          background-color: $color-blanco;
+          color: $color-texto-oscuro;
+          font-size: 0.95rem;
+          outline: none;
+          transition: border-color $transition-fast;
+
+          &:focus {
+            border-color: $color-primario;
+          }
+        }
+      }
+
+      .btn-actions {
+        display: flex;
+        gap: 8px;
+
+        button {
+          padding: 10px 16px;
+          border-radius: $radius-md;
+          font-weight: 600;
+          cursor: pointer;
+          border: none;
+          font-size: 0.9rem;
+          transition: background-color $transition-fast, color $transition-fast;
+        }
+
+        .btn-save-eval {
+          background-color: $color-primario;
+          color: $color-blanco;
+
+          &:hover {
+            background-color: $color-primario-dark;
+          }
+        }
+
+        .btn-cancel-eval {
+          background-color: rgba($color-texto-oscuro, 0.08);
+          color: $color-texto-oscuro;
+
+          &:hover {
+            background-color: rgba($color-texto-oscuro, 0.15);
+          }
+        }
+      }
+    }
+  }
+
+  // Workspace de Notas
+  .notas-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+
+    // Grid de Estadísticas
+    .notas-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $spacing-md;
+
+      .stat-card {
+        background-color: $color-blanco;
+        border-radius: $radius-lg;
+        padding: $spacing-md $spacing-lg;
+        box-shadow: $shadow-sm;
+        border: 1px solid $color-borde;
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+
+        .stat-icon {
+          font-size: 1.8rem;
+          color: $color-primario;
+          opacity: 0.8;
+        }
+
+        .stat-info {
+          display: flex;
+          flex-direction: column;
+
+          .stat-val {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: $color-texto-oscuro;
+
+            &.max-grade {
+              color: $color-exito;
+            }
+
+            &.min-grade {
+              color: $color-peligro;
+            }
+          }
+
+          .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: $color-texto-mutado;
+            letter-spacing: 0.5px;
+          }
+        }
+      }
+    }
+
+    // Tabla de notas
+    .table-responsive {
+      background-color: $color-blanco;
+      border-radius: $radius-lg;
+      box-shadow: $shadow-sm;
+      border: 1px solid $color-borde;
+      overflow-x: auto;
+    }
+
+    .tabla-calificaciones {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+
+      th {
+        padding: 14px 18px;
+        background-color: rgba($color-fondo, 0.6);
+        color: $color-texto-oscuro;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        border-bottom: 1px solid $color-borde;
+      }
+
+      td {
+        padding: 12px 18px;
+        border-bottom: 1px solid $color-borde;
+        font-size: 0.95rem;
+        vertical-align: middle;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      .rut-cell {
+        font-family: monospace;
+        color: $color-texto-mutado;
+      }
+
+      .name-cell {
+        font-weight: 600;
+        color: $color-texto-oscuro;
+      }
+
+      // Input Notas
+      .input-grade {
+        width: 80px;
+        padding: 8px 12px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        outline: none;
+        font-weight: 700;
+        text-align: center;
+        font-size: 1rem;
+        background-color: $color-fondo;
+        color: $color-primario;
+        transition: border-color $transition-fast, background-color $transition-fast;
+
+        &:focus {
+          border-color: $color-primario;
+          background-color: $color-blanco;
+        }
+
+        &.insuficiente {
+          color: $color-peligro;
+          border-color: rgba($color-peligro, 0.3);
+          background-color: rgba($color-peligro, 0.03);
+
+          &:focus {
+            border-color: $color-peligro;
+          }
+        }
+      }
+
+      // Input Puntajes
+      .input-score {
+        width: 70px;
+        padding: 8px 10px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        outline: none;
+        text-align: center;
+        background-color: $color-fondo;
+        color: $color-texto-oscuro;
+
+        &:focus {
+          border-color: $color-primario;
+        }
+      }
+
+      // Select formato
+      .select-format {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        background-color: $color-fondo;
+        outline: none;
+        color: $color-texto-oscuro;
+
+        &:focus {
+          border-color: $color-primario;
+        }
+      }
+
+      // Input Observaciones
+      .input-obs {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        outline: none;
+        background-color: $color-fondo;
+        color: $color-texto-oscuro;
+        font-size: 0.9rem;
+
+        &:focus {
+          border-color: $color-primario;
+          background-color: $color-blanco;
+        }
+      }
+    }
+
+    // Botón Guardar
+    .action-save-bar {
+      display: flex;
+      justify-content: flex-end;
+
+      .btn-save-grades {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: $radius-md;
+        background-color: $color-primario;
+        color: $color-blanco;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        box-shadow: $shadow-md;
+        transition: background-color $transition-fast, transform $transition-fast;
+
+        &:hover {
+          background-color: $color-primario-dark;
+          transform: translateY(-1px);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  // Estados vacíos / restringidos
+  .notas-empty-state {
+    background-color: $color-blanco;
+    border-radius: $radius-lg;
+    padding: 60px 40px;
+    border: 1px solid $color-borde;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+
+    .empty-icon {
+      font-size: 3rem;
+      color: $color-texto-mutado;
+      opacity: 0.5;
+    }
+
+    p {
+      max-width: 500px;
+      color: $color-texto-mutado;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+  }
+}
+
+.notas-forbidden {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: $spacing-md;
+  padding: $spacing-xl;
+
+  .icon-warn {
+    font-size: 4rem;
+    color: $color-alerta;
+  }
+
+  h2 {
+    font-family: $font-display;
+    font-size: 1.8rem;
+    color: $color-texto-oscuro;
+    font-weight: 800;
+  }
+
+  p {
+    color: $color-texto-mutado;
+    max-width: 450px;
+  }
+}

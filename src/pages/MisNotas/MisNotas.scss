@@ -1,0 +1,286 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.mis-notas-container {
+  padding: $spacing-xl;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+
+  .mis-notas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .icon-title {
+        font-size: 2.2rem;
+        color: $color-primario;
+      }
+
+      h1 {
+        font-family: $font-display;
+        font-size: 2rem;
+        font-weight: 800;
+        color: $color-texto-oscuro;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: $color-texto-mutado;
+      }
+    }
+  }
+
+  // Dashboard de métricas
+  .mis-notas-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: $spacing-lg;
+
+    .metric-card {
+      background-color: $color-blanco;
+      border-radius: $radius-lg;
+      padding: $spacing-lg $spacing-xl;
+      box-shadow: $shadow-sm;
+      border: 1px solid $color-borde;
+      display: flex;
+      align-items: center;
+      gap: $spacing-lg;
+
+      .metric-icon {
+        font-size: 2.2rem;
+        color: $color-primario;
+        background-color: rgba($color-primario, 0.06);
+        padding: 10px;
+        border-radius: $radius-md;
+      }
+
+      .metric-info {
+        display: flex;
+        flex-direction: column;
+
+        .metric-val {
+          font-size: 2rem;
+          font-weight: 800;
+          color: $color-texto-oscuro;
+          line-height: 1.1;
+
+          &.suficiente {
+            color: $color-primario;
+          }
+
+          &.insuficiente {
+            color: $color-peligro;
+          }
+        }
+
+        .metric-label {
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: $color-texto-mutado;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+
+  // Grid de contenido
+  .mis-notas-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: $spacing-xl;
+    align-items: start;
+
+    @media (max-width: 992px) {
+      grid-template-columns: 1fr;
+    }
+
+    .asignaturas-list {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
+
+      .asignatura-card {
+        background-color: $color-blanco;
+        border-radius: $radius-lg;
+        box-shadow: $shadow-sm;
+        border: 1px solid $color-borde;
+        overflow: hidden;
+
+        .asignatura-header {
+          padding: $spacing-lg $spacing-xl;
+          background-color: rgba($color-fondo, 0.4);
+          border-bottom: 1px solid $color-borde;
+          display: flex;
+          justify-content: justify;
+          justify-content: space-between;
+          align-items: center;
+
+          h2 {
+            font-family: $font-display;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: $color-texto-oscuro;
+          }
+
+          .prof-name {
+            font-size: 0.85rem;
+            color: $color-texto-mutado;
+          }
+
+          .asignatura-promedio {
+            font-size: 1.4rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: $radius-md;
+
+            &.vacio {
+              background-color: rgba($color-texto-mutado, 0.1);
+              color: $color-texto-mutado;
+            }
+
+            &.aprobado {
+              background-color: rgba($color-primario, 0.08);
+              color: $color-primario;
+            }
+
+            &.riesgo {
+              background-color: rgba($color-peligro, 0.08);
+              color: $color-peligro;
+            }
+          }
+        }
+
+        .calificaciones-sublist {
+          padding: $spacing-md $spacing-xl;
+        }
+
+        .tabla-calificaciones-estudiante {
+          width: 100%;
+          border-collapse: collapse;
+          text-align: left;
+
+          th {
+            padding: 10px 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: $color-texto-mutado;
+            border-bottom: 1px solid $color-borde;
+          }
+
+          td {
+            padding: 12px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid $color-borde;
+          }
+
+          tr:last-child td {
+            border-bottom: none;
+          }
+
+          .eval-title {
+            font-weight: 600;
+            color: $color-texto-oscuro;
+          }
+
+          .eval-pond {
+            color: $color-texto-mutado;
+          }
+
+          .eval-grade {
+            font-weight: 700;
+            color: $color-primario;
+
+            &.insuficiente {
+              color: $color-peligro;
+            }
+          }
+
+          .eval-comment {
+            color: $color-texto-mutado;
+            font-style: italic;
+            font-size: 0.85rem;
+          }
+        }
+
+        .empty-calificaciones {
+          display: flex;
+          align-items: center;
+          gap: $spacing-sm;
+          padding: $spacing-md 0;
+          color: $color-texto-mutado;
+          font-size: 0.9rem;
+
+          .icon-empty {
+            font-size: 1.1rem;
+          }
+        }
+      }
+    }
+
+    // Panel Lateral con Gráfico
+    .grafico-panel {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
+
+      .grafico-card {
+        background-color: $color-blanco;
+        border-radius: $radius-lg;
+        padding: $spacing-xl;
+        box-shadow: $shadow-sm;
+        border: 1px solid $color-borde;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-md;
+
+        h3 {
+          font-family: $font-display;
+          font-size: 1.15rem;
+          font-weight: 700;
+          color: $color-texto-oscuro;
+        }
+
+        p {
+          font-size: 0.85rem;
+          color: $color-texto-mutado;
+          margin-bottom: $spacing-sm;
+        }
+
+        .chart-container {
+          margin-top: $spacing-xs;
+        }
+
+        .empty-chart {
+          height: 200px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $color-texto-mutado;
+          font-size: 0.9rem;
+          border: 1px dashed $color-borde;
+          border-radius: $radius-md;
+        }
+      }
+    }
+  }
+
+  .loading-state {
+    text-align: center;
+    padding: 60px 0;
+    color: $color-texto-mutado;
+    font-size: 1.1rem;
+  }
+}

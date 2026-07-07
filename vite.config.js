@@ -17,6 +17,36 @@ export default defineConfig({
       // Todas las peticiones a /api se redirigen al backend en desarrollo.
       // Así evitas CORS sin tocar el backend: el navegador cree que habla
       // con el mismo servidor (localhost:5173) y Vite lo redirige internamente.
+      '/api/evaluaciones': {
+        target: 'http://localhost:8085',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/evaluaciones/, '/evaluacion')
+      },
+      '/api/notas': {
+        target: 'http://localhost:8085',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/notas/, '/nota')
+      },
+      '/api/cursos': {
+        target: 'http://localhost:8082',
+        changeOrigin: true
+      },
+      '/api/niveles': {
+        target: 'http://localhost:8082',
+        changeOrigin: true
+      },
+      '/api/salas': {
+        target: 'http://localhost:8082',
+        changeOrigin: true
+      },
+      '/api/asignaturas': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      },
+      '/api/bitacoras': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      },
       '/api': {
         target: 'http://localhost:8089',
         changeOrigin: true

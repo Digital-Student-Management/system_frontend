@@ -5,6 +5,8 @@ import { AuthProvider } from './context/AuthContext'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 import Login from './pages/Login/Login'
 import Dashboard from './pages/Dashboard/Dashboard'
+import RegistroNotas from './pages/RegistroNotas/RegistroNotas'
+import MisNotas from './pages/MisNotas/MisNotas'
 
 // Roles del sistema: ESTUDIANTE, DOCENTE, APODERADO, INSPECTOR, DIRECTIVO, FUNCIONARIO, ADMIN
 
@@ -16,12 +18,32 @@ export default function App() {
           {/* Ruta Pública */}
           <Route path="/login" element={<Login />} />
 
-          {/* Ruta Privada Protegida */}
+          {/* Ruta Privada Protegida - Dashboard */}
           <Route
             path="/"
             element={
               <PrivateRoute>
                 <Dashboard />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Registro de Notas (Docentes) */}
+          <Route
+            path="/registro-notas"
+            element={
+              <PrivateRoute roles={['DOCENTE', 'ADMIN']}>
+                <RegistroNotas />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Mis Notas (Estudiantes/Apoderados) */}
+          <Route
+            path="/mis-notas"
+            element={
+              <PrivateRoute roles={['ESTUDIANTE', 'APODERADO', 'ADMIN']}>
+                <MisNotas />
               </PrivateRoute>
             }
           />
