@@ -38,6 +38,36 @@
         color: $color-texto-mutado;
       }
     }
+
+    .btn-back-home {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background-color: $color-blanco;
+      border: 1px solid $color-borde;
+      border-radius: $radius-md;
+      color: $color-texto-suave;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: $shadow-sm;
+      transition: border-color $transition-fast, color $transition-fast, transform $transition-fast;
+
+      svg {
+        font-size: 1.05rem;
+        transition: transform $transition-fast;
+      }
+
+      &:hover {
+        border-color: $color-primario;
+        color: $color-primario;
+
+        svg {
+          transform: translateX(-2px);
+        }
+      }
+    }
   }
 
   // Panel de Selectores

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { 
   ResponsiveContainer, 
   LineChart, 
@@ -8,7 +9,7 @@ import {
   CartesianGrid, 
   Tooltip 
 } from 'recharts'
-import { FiBookOpen, FiAward, FiAlertCircle, FiActivity, FiTrendingUp } from 'react-icons/fi'
+import { FiBookOpen, FiAward, FiAlertCircle, FiActivity, FiTrendingUp, FiArrowLeft } from 'react-icons/fi'
 import { useAuth } from '../../hooks/useAuth'
 import { getMisNotas, getEvaluaciones } from '../../services/notaService'
 import { getAll as getAsignaturas } from '../../services/asignaturaService'
@@ -122,6 +123,9 @@ export default function MisNotas() {
             <p>Monitorea tu avance curricular, promedios parciales e informes reales de la base de datos.</p>
           </div>
         </div>
+        <Link to="/" className="btn-back-home">
+          <FiArrowLeft /> Volver al Inicio
+        </Link>
       </header>
 
       {loading ? (

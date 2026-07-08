@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { 
   FiAlertCircle, 
@@ -9,7 +10,8 @@ import {
   FiUser, 
   FiCalendar, 
   FiBookOpen, 
-  FiSave 
+  FiSave,
+  FiArrowLeft
 } from 'react-icons/fi'
 import { useAuth } from '../../hooks/useAuth'
 import { 
@@ -195,6 +197,9 @@ export default function Anotaciones() {
             </p>
           </div>
         </div>
+        <Link to="/" className="btn-back-home">
+          <FiArrowLeft /> Volver al Inicio
+        </Link>
       </header>
 
       {/* Selectores de búsqueda (solo para Docentes/Inspectores/Admins) */}

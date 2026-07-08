@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { FiPlus, FiSave, FiAlertTriangle, FiBookOpen, FiUser, FiTrendingUp } from 'react-icons/fi'
+import { FiPlus, FiSave, FiAlertTriangle, FiBookOpen, FiUser, FiTrendingUp, FiArrowLeft } from 'react-icons/fi'
 import { useAuth } from '../../hooks/useAuth'
 import { 
   getEvaluaciones, 
@@ -295,6 +296,9 @@ export default function RegistroNotas() {
             <p>Ingresa, edita y gestiona las planificaciones y notas de evaluaciones escolares desde la base de datos.</p>
           </div>
         </div>
+        <Link to="/" className="btn-back-home">
+          <FiArrowLeft /> Volver al Inicio
+        </Link>
       </header>
 
       {/* Selectores */}
