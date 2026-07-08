@@ -47,6 +47,10 @@ export default defineConfig({
         target: 'http://localhost:8081',
         changeOrigin: true
       },
+      '/api/bitacora': {
+        target: 'http://localhost:8084',
+        changeOrigin: true
+      },
       '/api': {
         target: 'http://localhost:8089',
         changeOrigin: true

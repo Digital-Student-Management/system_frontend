@@ -399,6 +399,9 @@ export default function Dashboard() {
               <FiAward /> Mis Notas
             </Link>
           )}
+          <Link to="/anotaciones" className="nav-link">
+            <FiFileText /> Anotaciones
+          </Link>
         </div>
 
         <div className="navbar-user-section">

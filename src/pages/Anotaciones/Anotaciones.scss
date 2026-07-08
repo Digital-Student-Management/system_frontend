@@ -1,0 +1,580 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.anotaciones-container {
+  padding: $spacing-xl;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+
+  .anotaciones-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .icon-title {
+        font-size: 2.2rem;
+        color: $color-primario;
+      }
+
+      h1 {
+        font-family: $font-display;
+        font-size: 2rem;
+        font-weight: 800;
+        color: $color-texto-oscuro;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: $color-texto-mutado;
+      }
+    }
+  }
+
+  // Selectores
+  .anotaciones-selectors {
+    background-color: $color-blanco;
+    border-radius: $radius-lg;
+    padding: $spacing-lg $spacing-xl;
+    box-shadow: $shadow-sm;
+    border: 1px solid $color-borde;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: $spacing-lg;
+
+    .selector-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $color-texto-oscuro;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      select {
+        padding: 10px 14px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        background-color: $color-fondo;
+        color: $color-texto-oscuro;
+        font-size: 0.95rem;
+        font-family: inherit;
+        outline: none;
+        transition: border-color $transition-fast, box-shadow $transition-fast;
+
+        &:focus {
+          border-color: $color-primario;
+          box-shadow: 0 0 0 3px rgba($color-primario, 0.12);
+        }
+      }
+    }
+  }
+
+  // Workspace
+  .anotaciones-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+  }
+
+  // Dashboard de métricas
+  .anotaciones-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: $spacing-lg;
+
+    .metric-card {
+      background-color: $color-blanco;
+      border-radius: $radius-lg;
+      padding: $spacing-lg $spacing-xl;
+      box-shadow: $shadow-sm;
+      border: 1px solid $color-borde;
+      display: flex;
+      align-items: center;
+      gap: $spacing-lg;
+
+      .metric-icon {
+        font-size: 2.2rem;
+        padding: 10px;
+        border-radius: $radius-md;
+      }
+
+      .metric-info {
+        display: flex;
+        flex-direction: column;
+
+        .metric-val {
+          font-size: 2rem;
+          font-weight: 800;
+          color: $color-texto-oscuro;
+          line-height: 1.1;
+
+          &.excelente {
+            color: $color-exito;
+          }
+
+          &.advertencia {
+            color: $color-alerta;
+          }
+
+          &.riesgo {
+            color: $color-peligro;
+          }
+        }
+
+        .metric-label {
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: $color-texto-mutado;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-top: 4px;
+        }
+      }
+
+      &.positiva {
+        .metric-icon {
+          color: $color-exito;
+          background-color: rgba($color-exito, 0.08);
+        }
+      }
+
+      &.negativa {
+        .metric-icon {
+          color: $color-peligro;
+          background-color: rgba($color-peligro, 0.08);
+        }
+      }
+
+      &.general {
+        .metric-icon {
+          color: $color-primario;
+          background-color: rgba($color-primario, 0.08);
+        }
+      }
+    }
+  }
+
+  // Grid principal
+  .anotaciones-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: $spacing-xl;
+    align-items: start;
+
+    @media (max-width: 992px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Panel del Timeline
+  .anotaciones-list-panel {
+    background-color: $color-blanco;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+    box-shadow: $shadow-sm;
+    border: 1px solid $color-borde;
+
+    h3 {
+      font-family: $font-display;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $color-texto-oscuro;
+      margin-bottom: $spacing-lg;
+    }
+
+    .anotaciones-timeline {
+      position: relative;
+      padding-left: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 11px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background-color: $color-borde;
+      }
+    }
+
+    .timeline-item {
+      position: relative;
+
+      .timeline-badge {
+        position: absolute;
+        left: -30px;
+        top: 2px;
+        width: 24px;
+        height: 24px;
+        border-radius: $radius-full;
+        background-color: $color-blanco;
+        border: 2px solid $color-borde;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        z-index: 1;
+      }
+
+      .timeline-content {
+        background-color: $color-fondo;
+        border-radius: $radius-md;
+        padding: $spacing-md;
+        border: 1px solid $color-borde;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .timeline-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .badge-tipo {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: $radius-full;
+            text-transform: uppercase;
+          }
+
+          .timeline-date {
+            font-size: 0.8rem;
+            color: $color-texto-mutado;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+        }
+
+        .descripcion {
+          font-size: 0.95rem;
+          color: $color-texto-oscuro;
+          line-height: 1.5;
+        }
+
+        .actions {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 4px;
+
+          .btn-delete {
+            background: none;
+            border: none;
+            color: $color-peligro;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: $radius-sm;
+            transition: background-color $transition-fast;
+
+            &:hover {
+              background-color: rgba($color-peligro, 0.08);
+            }
+          }
+        }
+      }
+
+      &.positiva {
+        .timeline-badge {
+          border-color: $color-exito;
+          color: $color-exito;
+        }
+        .badge-tipo {
+          background-color: rgba($color-exito, 0.08);
+          color: $color-exito;
+        }
+      }
+
+      &.negativa {
+        .timeline-badge {
+          border-color: $color-peligro;
+          color: $color-peligro;
+        }
+        .badge-tipo {
+          background-color: rgba($color-peligro, 0.08);
+          color: $color-peligro;
+        }
+      }
+    }
+
+    .anotaciones-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 0;
+      text-align: center;
+      color: $color-texto-mutado;
+      gap: $spacing-md;
+
+      .empty-icon {
+        font-size: 3rem;
+        color: $color-exito;
+        opacity: 0.4;
+      }
+    }
+  }
+
+  // Sidebar del Historial
+  .anotaciones-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+
+    .sidebar-card {
+      background-color: $color-blanco;
+      border-radius: $radius-lg;
+      padding: $spacing-xl;
+      box-shadow: $shadow-sm;
+      border: 1px solid $color-borde;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+
+      h3 {
+        font-family: $font-display;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: $color-texto-oscuro;
+      }
+
+      .subtitle {
+        font-size: 0.85rem;
+        color: $color-texto-mutado;
+      }
+    }
+
+    // Editor de observación
+    .observacion-editor {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      textarea {
+        width: 100%;
+        min-height: 100px;
+        padding: 12px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        outline: none;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 0.9rem;
+        color: $color-texto-oscuro;
+
+        &:focus {
+          border-color: $color-primario;
+        }
+      }
+
+      .btn-save-obs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px;
+        border-radius: $radius-md;
+        border: none;
+        background-color: $color-primario;
+        color: $color-blanco;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color $transition-fast;
+
+        &:hover {
+          background-color: $color-primario-dark;
+        }
+      }
+    }
+
+    .observacion-view {
+      background-color: rgba($color-primario, 0.03);
+      padding: $spacing-md;
+      border-radius: $radius-md;
+      border: 1px dashed rgba($color-primario, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .obs-content {
+        font-size: 0.95rem;
+        color: $color-texto-oscuro;
+        line-height: 1.5;
+        font-style: italic;
+      }
+
+      .obs-date {
+        font-size: 0.75rem;
+        color: $color-texto-mutado;
+        text-align: right;
+      }
+    }
+
+    // Formulario de Nueva Anotación
+    .form-anotacion {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: $color-texto-oscuro;
+        }
+
+        textarea {
+          width: 100%;
+          min-height: 80px;
+          padding: 10px;
+          border-radius: $radius-md;
+          border: 1px solid $color-borde;
+          outline: none;
+          font-family: inherit;
+          font-size: 0.9rem;
+          color: $color-texto-oscuro;
+          resize: vertical;
+
+          &:focus {
+            border-color: $color-primario;
+          }
+        }
+      }
+
+      .radio-group {
+        display: flex;
+        gap: $spacing-md;
+
+        .radio-label {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          padding: 10px;
+          border-radius: $radius-md;
+          border: 1px solid $color-borde;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: border-color $transition-fast, background-color $transition-fast;
+
+          input {
+            display: none;
+          }
+
+          &.positiva.active {
+            border-color: $color-exito;
+            background-color: rgba($color-exito, 0.08);
+            color: $color-exito;
+          }
+
+          &.negativa.active {
+            border-color: $color-peligro;
+            background-color: rgba($color-peligro, 0.08);
+            color: $color-peligro;
+          }
+        }
+      }
+
+      .btn-submit-anotacion {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 12px;
+        border-radius: $radius-md;
+        border: none;
+        background-color: $color-primario;
+        color: $color-blanco;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color $transition-fast;
+
+        &:hover {
+          background-color: $color-primario-dark;
+        }
+      }
+    }
+  }
+
+  // Estado vacío general
+  .anotaciones-empty-state {
+    background-color: $color-blanco;
+    border-radius: $radius-lg;
+    padding: 60px 40px;
+    border: 1px solid $color-borde;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+
+    .empty-icon {
+      font-size: 3rem;
+      color: $color-texto-mutado;
+      opacity: 0.5;
+    }
+
+    p {
+      max-width: 500px;
+      color: $color-texto-mutado;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+  }
+}
+
+.notas-forbidden {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: $spacing-md;
+  padding: $spacing-xl;
+
+  .icon-warn {
+    font-size: 4rem;
+    color: $color-alerta;
+  }
+
+  h2 {
+    font-family: $font-display;
+    font-size: 1.8rem;
+    color: $color-texto-oscuro;
+    font-weight: 800;
+  }
+
+  p {
+    color: $color-texto-mutado;
+    max-width: 450px;
+  }
+}
