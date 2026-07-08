@@ -9,7 +9,8 @@ import {
   FiFileText,
   FiUsers,
   FiAlertCircle,
-  FiAward
+  FiAward,
+  FiMail
 } from 'react-icons/fi'
 import {
   BarChart,
@@ -401,6 +402,9 @@ export default function Dashboard() {
           )}
           <Link to="/anotaciones" className="nav-link">
             <FiFileText /> Anotaciones
+          </Link>
+          <Link to="/mensajeria" className="nav-link">
+            <FiMail /> Mensajería
           </Link>
         </div>
 

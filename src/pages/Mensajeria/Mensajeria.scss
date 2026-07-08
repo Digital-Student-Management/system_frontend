@@ -1,0 +1,561 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.mensajeria-container {
+  padding: $spacing-xl;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+  height: calc(100vh - 120px); // Ajustar para viewport fijo
+
+  .mensajeria-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .icon-title {
+        font-size: 2.2rem;
+        color: $color-primario;
+      }
+
+      h1 {
+        font-family: $font-display;
+        font-size: 2rem;
+        font-weight: 800;
+        color: $color-texto-oscuro;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: $color-texto-mutado;
+      }
+    }
+
+    .btn-back-home {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background-color: $color-blanco;
+      border: 1px solid $color-borde;
+      border-radius: $radius-md;
+      color: $color-texto-suave;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: $shadow-sm;
+      transition: border-color $transition-fast, color $transition-fast, transform $transition-fast;
+
+      svg {
+        font-size: 1.05rem;
+        transition: transform $transition-fast;
+      }
+
+      &:hover {
+        border-color: $color-primario;
+        color: $color-primario;
+
+        svg {
+          transform: translateX(-2px);
+        }
+      }
+    }
+  }
+
+  // Layout dual
+  .mensajeria-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    background-color: $color-blanco;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-md;
+    border: 1px solid $color-borde;
+    overflow: hidden;
+    flex-grow: 1;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
+  }
+
+  // Sidebar (Lista de Mensajes)
+  .mensajeria-sidebar {
+    border-right: 1px solid $color-borde;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba($color-fondo, 0.5);
+    height: 100%;
+
+    .btn-compose {
+      margin: $spacing-md;
+      padding: 12px;
+      border-radius: $radius-md;
+      border: none;
+      background-color: $color-primario;
+      color: $color-blanco;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: $shadow-sm;
+      transition: background-color $transition-fast, transform $transition-fast;
+
+      &:hover {
+        background-color: $color-primario-dark;
+      }
+
+      &.active {
+        background-color: $color-primario-dark;
+      }
+    }
+
+    .search-bar {
+      margin: 0 $spacing-md $spacing-md;
+      position: relative;
+
+      .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $color-texto-mutado;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 12px 10px 36px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        background-color: $color-blanco;
+        font-family: inherit;
+        font-size: 0.9rem;
+        outline: none;
+        color: $color-texto-oscuro;
+
+        &:focus {
+          border-color: $color-primario;
+        }
+      }
+    }
+
+    .message-list-header {
+      padding: $spacing-sm $spacing-md;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: $color-texto-mutado;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid $color-borde;
+    }
+
+    .messages-list {
+      flex-grow: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+
+      .status-text {
+        padding: $spacing-lg;
+        text-align: center;
+        color: $color-texto-mutado;
+        font-size: 0.9rem;
+      }
+
+      .message-item {
+        padding: $spacing-md;
+        border-bottom: 1px solid $color-borde;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        transition: background-color $transition-fast;
+
+        &:hover {
+          background-color: rgba($color-primario, 0.04);
+        }
+
+        &.active {
+          background-color: rgba($color-primario, 0.08);
+          border-left: 4px solid $color-primario;
+          padding-left: 12px; // Compensar borde
+        }
+
+        .item-meta {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.8rem;
+
+          .sender {
+            font-weight: 700;
+            color: $color-texto-oscuro;
+          }
+
+          .date {
+            color: $color-texto-mutado;
+          }
+        }
+
+        .subject {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: $color-primario;
+        }
+
+        .body-excerpt {
+          font-size: 0.85rem;
+          color: $color-texto-suave;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .attachment-indicator {
+          font-size: 0.75rem;
+          color: $color-texto-mutado;
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          margin-top: 2px;
+        }
+      }
+
+      .empty-mailbox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px $spacing-md;
+        text-align: center;
+        color: $color-texto-mutado;
+        gap: 12px;
+
+        .empty-icon {
+          font-size: 2.2rem;
+          opacity: 0.4;
+        }
+
+        p {
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+
+  // Panel Derecho
+  .mensajeria-main-panel {
+    background-color: $color-blanco;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    padding: $spacing-xl;
+  }
+
+  // Vista de Redacción
+  .composer-view {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+
+    h2 {
+      font-family: $font-display;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: $color-texto-oscuro;
+      border-bottom: 2px solid $color-fondo;
+      padding-bottom: 10px;
+    }
+
+    .composer-form {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: $color-texto-oscuro;
+        }
+
+        select, input[type="text"] {
+          padding: 10px 14px;
+          border-radius: $radius-md;
+          border: 1px solid $color-borde;
+          font-family: inherit;
+          font-size: 0.95rem;
+          outline: none;
+          color: $color-texto-oscuro;
+
+          &:focus {
+            border-color: $color-primario;
+          }
+        }
+
+        textarea {
+          min-height: 180px;
+          padding: 12px 14px;
+          border-radius: $radius-md;
+          border: 1px solid $color-borde;
+          font-family: inherit;
+          font-size: 0.95rem;
+          outline: none;
+          color: $color-texto-oscuro;
+          resize: vertical;
+
+          &:focus {
+            border-color: $color-primario;
+          }
+        }
+      }
+
+      .file-input-group {
+        input[type="file"] {
+          display: none;
+        }
+
+        .file-label {
+          align-self: flex-start;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 14px;
+          border-radius: $radius-md;
+          border: 1px dashed $color-primario;
+          background-color: rgba($color-primario, 0.02);
+          color: $color-primario;
+          font-size: 0.85rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background-color $transition-fast;
+
+          &:hover {
+            background-color: rgba($color-primario, 0.08);
+          }
+        }
+
+        .btn-clear-file {
+          align-self: flex-start;
+          background: none;
+          border: none;
+          color: $color-peligro;
+          font-size: 0.8rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-top: 4px;
+          text-decoration: underline;
+        }
+      }
+
+      .composer-actions {
+        display: flex;
+        gap: $spacing-md;
+        margin-top: $spacing-md;
+
+        .btn-send-message {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 12px 24px;
+          border-radius: $radius-md;
+          border: none;
+          background-color: $color-primario;
+          color: $color-blanco;
+          font-weight: 700;
+          cursor: pointer;
+          transition: background-color $transition-fast;
+
+          &:hover {
+            background-color: $color-primario-dark;
+          }
+        }
+
+        .btn-cancel {
+          padding: 12px 20px;
+          border-radius: $radius-md;
+          border: 1px solid $color-borde;
+          background-color: $color-blanco;
+          color: $color-texto-suave;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background-color $transition-fast;
+
+          &:hover {
+            background-color: $color-fondo;
+          }
+        }
+      }
+    }
+  }
+
+  // Detalle del Mensaje
+  .message-detail-view {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid $color-fondo;
+      padding-bottom: $spacing-md;
+
+      h2 {
+        font-family: $font-display;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: $color-texto-oscuro;
+        margin-bottom: 6px;
+      }
+
+      .sender-info, .date-info {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.9rem;
+        color: $color-texto-suave;
+        margin-top: 4px;
+      }
+
+      .btn-delete-message {
+        background-color: rgba($color-peligro, 0.08);
+        border: none;
+        color: $color-peligro;
+        padding: 8px 14px;
+        border-radius: $radius-md;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: background-color $transition-fast, color $transition-fast;
+
+        &:hover {
+          background-color: $color-peligro;
+          color: $color-blanco;
+        }
+      }
+    }
+
+    .detail-body {
+      padding: $spacing-md 0;
+      p {
+        font-size: 1rem;
+        color: $color-texto-oscuro;
+        line-height: 1.6;
+        white-space: pre-wrap;
+      }
+    }
+
+    .detail-attachments {
+      border-top: 1px solid $color-borde;
+      padding-top: $spacing-lg;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      h4 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: $color-texto-oscuro;
+      }
+
+      .attachment-download-card {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        padding: 12px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        background-color: $color-fondo;
+        text-decoration: none;
+        max-width: 450px;
+        transition: border-color $transition-fast, box-shadow $transition-fast;
+
+        .attach-icon {
+          font-size: 1.5rem;
+          color: $color-primario;
+        }
+
+        .attach-info {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+
+          span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: $color-texto-oscuro;
+          }
+
+          small {
+            font-size: 0.75rem;
+            color: $color-texto-mutado;
+          }
+        }
+
+        .download-icon {
+          font-size: 1.1rem;
+          color: $color-texto-mutado;
+          transition: color $transition-fast;
+        }
+
+        &:hover {
+          border-color: $color-primario;
+          box-shadow: $shadow-sm;
+
+          .download-icon {
+            color: $color-primario;
+          }
+        }
+      }
+    }
+  }
+
+  // Estado vacío detalle
+  .detail-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: $color-texto-mutado;
+    gap: $spacing-md;
+    padding: 40px;
+
+    .empty-icon {
+      font-size: 4rem;
+      opacity: 0.3;
+    }
+
+    p {
+      max-width: 400px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+}

@@ -51,6 +51,10 @@ export default defineConfig({
         target: 'http://localhost:8084',
         changeOrigin: true
       },
+      '/api/mensajes': {
+        target: 'http://localhost:8086',
+        changeOrigin: true
+      },
       '/api': {
         target: 'http://localhost:8089',
         changeOrigin: true

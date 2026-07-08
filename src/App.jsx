@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import RegistroNotas from './pages/RegistroNotas/RegistroNotas'
 import MisNotas from './pages/MisNotas/MisNotas'
 import Anotaciones from './pages/Anotaciones/Anotaciones'
+import Mensajeria from './pages/Mensajeria/Mensajeria'
 
 // Roles del sistema: ESTUDIANTE, DOCENTE, APODERADO, INSPECTOR, DIRECTIVO, FUNCIONARIO, ADMIN
 
@@ -55,6 +56,16 @@ export default function App() {
             element={
               <PrivateRoute roles={['ESTUDIANTE', 'DOCENTE', 'APODERADO', 'INSPECTOR', 'ADMIN']}>
                 <Anotaciones />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Mensajería (Todos los roles) */}
+          <Route
+            path="/mensajeria"
+            element={
+              <PrivateRoute>
+                <Mensajeria />
               </PrivateRoute>
             }
           />
