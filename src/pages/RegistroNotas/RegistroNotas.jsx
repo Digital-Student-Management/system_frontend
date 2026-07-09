@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { FiPlus, FiSave, FiAlertTriangle, FiBookOpen, FiUser, FiTrendingUp, FiArrowLeft } from 'react-icons/fi'
+import { FiPlus, FiSave, FiAlertTriangle, FiBookOpen, FiUser, FiTrendingUp, FiArrowLeft, FiTrash2 } from 'react-icons/fi'
 import { useAuth } from '../../hooks/useAuth'
-import { 
-  getEvaluaciones, 
-  createEvaluacion, 
-  getNotasByEvaluacion, 
-  registrarNota, 
-  updateNota 
+import {
+  getEvaluaciones,
+  createEvaluacion,
+  getNotasByEvaluacion,
+  registrarNota,
+  updateNota,
+  deleteNota
 } from '../../services/notaService'
 import { getAll as getCursos } from '../../services/cursoService'
 import { getAll as getAsignaturas } from '../../services/asignaturaService'
@@ -197,6 +198,27 @@ export default function RegistroNotas() {
     }))
   }
 
+  // Eliminar una calificación ya registrada en la base de datos
+  const handleEliminarNota = async (estudianteId) => {
+    const item = notas[estudianteId]
+    if (!item?.id_nota) {
+      toast.info('Esta calificación aún no está guardada.')
+      return
+    }
+    if (!window.confirm('¿Eliminar esta calificación de la base de datos?')) return
+    setLoading(true)
+    try {
+      await deleteNota(item.id_nota)
+      toast.success('Calificación eliminada.')
+      cargarNotas(evaluacionSeleccionada)
+    } catch (err) {
+      console.error('Error al eliminar nota:', err)
+      toast.error('No se pudo eliminar la calificación.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Guardar Calificaciones
   const handleGuardarNotas = async () => {
     if (!evaluacionSeleccionada) return
@@ -204,6 +226,7 @@ export default function RegistroNotas() {
     setLoading(true)
     let exitosas = 0
     let fallidas = 0
+    let modificadas = 0
 
     try {
       for (const estId of Object.keys(notas)) {
@@ -229,6 +252,7 @@ export default function RegistroNotas() {
         try {
           if (item.id_nota) {
             await updateNota(item.id_nota, payload)
+            modificadas++
           } else {
             await registrarNota(payload)
           }
@@ -245,7 +269,13 @@ export default function RegistroNotas() {
       } else {
         toast.info('No se guardaron notas nuevas.')
       }
-      
+
+      // Notificar cambio de nota (caso de uso «extend»): al modificar notas existentes,
+      // el sistema avisa que se notificará a apoderados/estudiantes del cambio.
+      if (modificadas > 0) {
+        toast.info(`🔔 Se notificó a los apoderados el cambio de ${modificadas} calificación(es).`)
+      }
+
       cargarNotas(evaluacionSeleccionada)
     } catch (err) {
       console.error('Error masivo al guardar notas:', err)
@@ -453,6 +483,7 @@ export default function RegistroNotas() {
                   <th style={{ width: '100px' }}>Puntaje</th>
                   <th style={{ width: '130px' }}>Formato</th>
                   <th>Observación / Comentario</th>
+                  <th style={{ width: '60px' }}>Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -503,6 +534,17 @@ export default function RegistroNotas() {
                           className="input-obs"
                           onChange={(e) => handleNotaChange(est.id, 'observacion', e.target.value)}
                         />
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn-del-nota"
+                          title={item.id_nota ? 'Eliminar calificación' : 'Sin calificación guardada'}
+                          disabled={!item.id_nota}
+                          onClick={() => handleEliminarNota(est.id)}
+                        >
+                          <FiTrash2 />
+                        </button>
                       </td>
                     </tr>
                   )

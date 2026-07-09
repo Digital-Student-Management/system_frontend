@@ -197,14 +197,11 @@ export default function Login() {
                   className={errors.rol ? 'error' : ''}
                   disabled={isLoading}
                 >
-                  {/* El registro crea subtipos reales en ms-usuarios. ADMIN se omite
-                      del auto-registro (las cuentas de administrador las crea otro admin). */}
+                  {/* Seguridad: el auto-registro público SOLO permite roles no privilegiados.
+                      Las cuentas de personal (docente, inspector, directivo, etc.) las crea
+                      un administrador; el backend rechaza cualquier otro rol en /auth/register. */}
                   <option value="ESTUDIANTE">Estudiante</option>
                   <option value="APODERADO">Apoderado</option>
-                  <option value="DOCENTE">Docente</option>
-                  <option value="INSPECTOR">Inspector</option>
-                  <option value="DIRECTIVO">Directivo</option>
-                  <option value="FUNCIONARIO">Funcionario</option>
                 </select>
                 <FiEdit3 />
               </div>

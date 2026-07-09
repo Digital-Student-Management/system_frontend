@@ -20,6 +20,8 @@ import AdminUsuarios from './pages/AdminUsuarios/AdminUsuarios'
 import AdminCursos from './pages/AdminCursos/AdminCursos'
 import AdminAsignaturas from './pages/AdminAsignaturas/AdminAsignaturas'
 import AdminSalas from './pages/AdminSalas/AdminSalas'
+import Matriculas from './pages/Matriculas/Matriculas'
+import Calendario from './pages/Calendario/Calendario'
 
 // Roles del sistema: ESTUDIANTE, DOCENTE, APODERADO, INSPECTOR, DIRECTIVO, FUNCIONARIO, ADMIN
 
@@ -137,6 +139,26 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Reuniones />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Matrículas (gestión + apoderado consulta) */}
+          <Route
+            path="/matriculas"
+            element={
+              <PrivateRoute roles={['ADMIN', 'DIRECTIVO', 'FUNCIONARIO', 'APODERADO']}>
+                <Matriculas />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Calendario Estudiantil (todos los roles) */}
+          <Route
+            path="/calendario"
+            element={
+              <PrivateRoute>
+                <Calendario />
               </PrivateRoute>
             }
           />

@@ -226,6 +226,33 @@
       margin-bottom: $spacing-lg;
     }
 
+    .list-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $spacing-md;
+      flex-wrap: wrap;
+
+      h3 { margin-bottom: 0; }
+
+      .btn-descargar-hoja {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: $radius-md;
+        border: 1px solid $color-primario;
+        background-color: transparent;
+        color: $color-primario;
+        font-weight: 600;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: background-color $transition-fast, color $transition-fast;
+
+        &:hover { background-color: $color-primario; color: $color-blanco; }
+      }
+    }
+
     .anotaciones-timeline {
       position: relative;
       padding-left: 30px;

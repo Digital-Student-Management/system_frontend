@@ -81,6 +81,50 @@
     }
   }
 
+  .reuniones-barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+
+    .filtro-fecha {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $color-texto-oscuro;
+        svg { color: $color-primario; }
+      }
+
+      input {
+        padding: 8px 12px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        background: $color-fondo;
+        color: $color-texto-oscuro;
+        outline: none;
+        &:focus { border-color: $color-primario; }
+      }
+
+      .btn-limpiar {
+        background: none;
+        border: none;
+        color: $color-primario;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        &:hover { text-decoration: underline; }
+      }
+    }
+  }
+
   .btn-nuevo {
     @include btn-primary;
     align-self: flex-start;
@@ -204,6 +248,12 @@
       align-items: flex-end;
       gap: $spacing-sm;
 
+      .card-botones {
+        display: flex;
+        gap: 6px;
+      }
+
+      .btn-edit,
       .btn-del {
         width: 34px;
         height: 34px;
@@ -214,8 +264,9 @@
         cursor: pointer;
         @include flex-center;
         transition: $transition-fast;
-        &:hover { border-color: $color-error; color: $color-error; }
       }
+      .btn-edit:hover { border-color: $color-primario; color: $color-primario; }
+      .btn-del:hover { border-color: $color-error; color: $color-error; }
     }
   }
 

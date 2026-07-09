@@ -51,6 +51,14 @@ export default defineConfig({
         target: 'http://localhost:8084',
         changeOrigin: true
       },
+      '/api/matriculas': {
+        target: 'http://localhost:8084',
+        changeOrigin: true
+      },
+      '/api/calendario': {
+        target: 'http://localhost:8087',
+        changeOrigin: true
+      },
       '/api/mensajes': {
         target: 'http://localhost:8086',
         changeOrigin: true

@@ -56,8 +56,9 @@ const post = (url, body, token) => req('POST', url, body, token)
 const get = (url) => req('GET', url)
 const del = (url, token) => req('DELETE', url, null, token)
 
-async function register(nombreCompleto, rut, email, rol) {
-  const r = await post(`${P.usuarios}/api/auth/register`, { nombreCompleto, rut, email, password: PASS, rol })
+// Para roles de personal se pasa el token de un admin (autorización requerida por el backend).
+async function register(nombreCompleto, rut, email, rol, token) {
+  const r = await post(`${P.usuarios}/api/auth/register`, { nombreCompleto, rut, email, password: PASS, rol }, token)
   if (r?.user) console.log(`  ✓ ${rol.padEnd(10)} ${nombreCompleto.padEnd(20)} id=${r.user.id}  (${email})`)
   return r // { token, user }
 }
@@ -71,12 +72,13 @@ async function main() {
   if (!adminToken) { console.log('\n⚠  No se pudo crear el ADMIN. ¿Están arriba los microservicios? Abortando.'); return }
 
   console.log('\n=== 2. PERSONAL Y APODERADOS ===')
+  // Los roles de personal se crean con el token del admin (autorización del backend).
   const docentes = []
-  docentes.push((await register('María González', '15.111.111-1', 'docente@colegio.cl', 'DOCENTE'))?.user)
-  docentes.push((await register('Pedro Ramírez', '15.222.222-2', 'pedro.ramirez@colegio.cl', 'DOCENTE'))?.user)
-  docentes.push((await register('Ana Torres', '15.333.333-3', 'ana.torres@colegio.cl', 'DOCENTE'))?.user)
-  const directivo = (await register('Roberto Fuentes', '14.000.000-0', 'directivo@colegio.cl', 'DIRECTIVO'))?.user
-  await register('Carmen Rojas', '14.111.111-1', 'inspector@colegio.cl', 'INSPECTOR')
+  docentes.push((await register('María González', '15.111.111-1', 'docente@colegio.cl', 'DOCENTE', adminToken))?.user)
+  docentes.push((await register('Pedro Ramírez', '15.222.222-2', 'pedro.ramirez@colegio.cl', 'DOCENTE', adminToken))?.user)
+  docentes.push((await register('Ana Torres', '15.333.333-3', 'ana.torres@colegio.cl', 'DOCENTE', adminToken))?.user)
+  const directivo = (await register('Roberto Fuentes', '14.000.000-0', 'directivo@colegio.cl', 'DIRECTIVO', adminToken))?.user
+  await register('Carmen Rojas', '14.111.111-1', 'inspector@colegio.cl', 'INSPECTOR', adminToken)
   const apo1 = (await register('Jorge Vidal', '16.111.111-1', 'apoderado@colegio.cl', 'APODERADO'))?.user
   const apo2 = (await register('Lucía Morales', '16.222.222-2', 'lucia.morales@colegio.cl', 'APODERADO'))?.user
 
@@ -106,7 +108,7 @@ async function main() {
 
   const est = []
   const estDefs = [
-    ['Tomás', 'Vidal', '20.111.111-1', 'estudiante@colegio.cl', apo1],
+    ['Tomás', 'Vidal', '20.111.111-1', 'tomas.vidal@colegio.cl', apo1],
     ['Sofía', 'Vidal', '20.222.222-2', 'sofia.vidal@colegio.cl', apo1],
     ['Matías', 'Morales', '20.333.333-3', 'matias.morales@colegio.cl', apo2],
     ['Valentina', 'Soto', '20.444.444-4', 'valentina.soto@colegio.cl', apo2],
@@ -162,6 +164,17 @@ async function main() {
   if (est[0]) await post(`${P.estudiantes}/api/bitacora/anotaciones`, { idEstudiante: est[0].id, tipoAnotacion: 'POSITIVA', descripcionAnotacion: 'Excelente disposición y ayuda a sus compañeros.' })
   if (est[2]) await post(`${P.estudiantes}/api/bitacora/anotaciones`, { idEstudiante: est[2].id, tipoAnotacion: 'NEGATIVA', descripcionAnotacion: 'No trajo materiales de trabajo.' })
   console.log('  ✓ Bitácora, mural, reuniones y anotaciones cargadas')
+
+  console.log('\n=== 9. MATRÍCULAS Y CALENDARIO ===')
+  if (directivo) {
+    for (const e of est) {
+      await post(`${P.estudiantes}/api/matriculas`, { idEstudiante: e.id, idDirectivo: directivo.id, estadoMatricula: 'VIGENTE' })
+    }
+    await post(`${P.murales}/api/calendario`, { idFuncionario: directivo.id, tituloEvento: 'Inicio de clases 2026', descripEvento: 'Comienzo del año escolar para todos los niveles.', fechaInicio: '2026-03-03' })
+    await post(`${P.murales}/api/calendario`, { idFuncionario: directivo.id, tituloEvento: 'Reunión general de apoderados', descripEvento: 'Primera reunión de apoderados del año.', fechaInicio: '2026-04-08' })
+    await post(`${P.murales}/api/calendario`, { idFuncionario: directivo.id, tituloEvento: 'Vacaciones de invierno', descripEvento: 'Receso escolar de invierno.', fechaInicio: '2026-07-14', fechaFin: '2026-07-25' })
+  }
+  console.log(`  ✓ ${est.length} matrículas y 3 eventos de calendario`)
 
   console.log(`\n======= FIN =======  Éxitos: ${ok}  ·  Fallos: ${fail}`)
   console.log('\nCredenciales (contraseña: Password123):')

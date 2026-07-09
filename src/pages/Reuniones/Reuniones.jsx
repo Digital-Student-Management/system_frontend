@@ -6,6 +6,7 @@ import {
   FiArrowLeft,
   FiPlus,
   FiTrash2,
+  FiEdit2,
   FiX,
   FiUser,
   FiUsers,
@@ -45,6 +46,8 @@ export default function Reuniones() {
 
   const [mostrarForm, setMostrarForm] = useState(false)
   const [form, setForm] = useState({})
+  const [editandoId, setEditandoId] = useState(null)
+  const [filtroFecha, setFiltroFecha] = useState('')
 
   // Carga de catálogos para los selectores
   useEffect(() => {
@@ -92,6 +95,7 @@ export default function Reuniones() {
   const puedeGestionar = tab === 'actas' ? esDirectivo : esDocente
 
   const abrirForm = () => {
+    setEditandoId(null)
     // Valores iniciales por pestaña
     if (tab === 'citaciones') {
       setForm({ estado: 'PENDIENTE', idDocente: usuario?.id, idEstudiante: '', idApoderado: '', temaEspEstudiante: '', acuerdosCompromisos: '' })
@@ -99,6 +103,20 @@ export default function Reuniones() {
       setForm({ estado: 'PENDIENTE', idDocente: usuario?.id, idCurso: '', temarioGeneralCurso: '', acuerdosCompromisos: '' })
     } else {
       setForm({ tipoReunion: '', idDirectivo: usuario?.id, decisionesAcuerdos: '' })
+    }
+    setMostrarForm(true)
+  }
+
+  const abrirEditar = (item) => {
+    if (tab === 'citaciones') {
+      setEditandoId(item.idReunion)
+      setForm({ estado: item.estado || 'PENDIENTE', idDocente: item.idDocente, idEstudiante: item.idEstudiante, idApoderado: item.idApoderado, temaEspEstudiante: item.temaEspEstudiante || '', acuerdosCompromisos: item.acuerdosCompromisos || '' })
+    } else if (tab === 'generales') {
+      setEditandoId(item.idReunion)
+      setForm({ estado: item.estado || 'PENDIENTE', idDocente: item.idDocente, idCurso: item.idCurso, temarioGeneralCurso: item.temarioGeneralCurso || '', acuerdosCompromisos: item.acuerdosCompromisos || '' })
+    } else {
+      setEditandoId(item.idActa)
+      setForm({ tipoReunion: item.tipoReunion || '', idDirectivo: item.idDirectivo, decisionesAcuerdos: item.decisionesAcuerdos || '' })
     }
     setMostrarForm(true)
   }
@@ -115,36 +133,31 @@ export default function Reuniones() {
           setLoading(false)
           return
         }
-        await reunionService.createCitacion({
-          ...form,
-          idDocente: Number(form.idDocente) || null,
-          idEstudiante: Number(form.idEstudiante),
-          idApoderado: Number(form.idApoderado)
-        })
+        const payload = { ...form, idDocente: Number(form.idDocente) || null, idEstudiante: Number(form.idEstudiante), idApoderado: Number(form.idApoderado) }
+        if (editandoId) await reunionService.updateCitacion(editandoId, payload)
+        else await reunionService.createCitacion(payload)
       } else if (tab === 'generales') {
         if (!form.idCurso) {
           toast.warning('Selecciona un curso.')
           setLoading(false)
           return
         }
-        await reunionService.createGeneral({
-          ...form,
-          idDocente: Number(form.idDocente) || null,
-          idCurso: Number(form.idCurso)
-        })
+        const payload = { ...form, idDocente: Number(form.idDocente) || null, idCurso: Number(form.idCurso) }
+        if (editandoId) await reunionService.updateGeneral(editandoId, payload)
+        else await reunionService.createGeneral(payload)
       } else {
         if (!form.tipoReunion) {
           toast.warning('Indica el tipo de reunión.')
           setLoading(false)
           return
         }
-        await reunionService.createActa({
-          ...form,
-          idDirectivo: Number(form.idDirectivo) || null
-        })
+        const payload = { ...form, idDirectivo: Number(form.idDirectivo) || null }
+        if (editandoId) await reunionService.updateActa(editandoId, payload)
+        else await reunionService.createActa(payload)
       }
-      toast.success('Registro creado correctamente.')
+      toast.success(editandoId ? 'Registro actualizado correctamente.' : 'Registro creado correctamente.')
       setMostrarForm(false)
+      setEditandoId(null)
       cargarDatos()
     } catch (err) {
       console.error('Error guardando reunión:', err)
@@ -192,7 +205,14 @@ export default function Reuniones() {
     <span className={`estado-chip ${(estado || 'pendiente').toLowerCase()}`}>{estado || 'PENDIENTE'}</span>
   )
 
-  const lista = tab === 'citaciones' ? citaciones : tab === 'generales' ? generales : actas
+  // Filtrado por fecha (compara el prefijo YYYY-MM-DD del campo de fecha correspondiente)
+  const filtrarPorFecha = (items, campoFecha) =>
+    !filtroFecha ? items : items.filter((i) => String(i[campoFecha] || '').startsWith(filtroFecha))
+  const citacionesF = filtrarPorFecha(citaciones, 'fechaProgramada')
+  const generalesF = filtrarPorFecha(generales, 'fechaProgramada')
+  const actasF = filtrarPorFecha(actas, 'fechaReunion')
+
+  const lista = tab === 'citaciones' ? citacionesF : tab === 'generales' ? generalesF : actasF
 
   return (
     <div className="reuniones-container">
@@ -221,22 +241,29 @@ export default function Reuniones() {
         </button>
       </nav>
 
-      {puedeGestionar && !mostrarForm && (
-        <button type="button" className="btn-nuevo" onClick={abrirForm}>
-          <FiPlus /> Nuevo Registro
-        </button>
-      )}
+      <div className="reuniones-barra">
+        <div className="filtro-fecha">
+          <label><FiCalendar /> Filtrar por fecha:</label>
+          <input type="date" value={filtroFecha} onChange={(e) => setFiltroFecha(e.target.value)} />
+          {filtroFecha && <button type="button" className="btn-limpiar" onClick={() => setFiltroFecha('')}>Limpiar</button>}
+        </div>
+        {puedeGestionar && !mostrarForm && (
+          <button type="button" className="btn-nuevo" onClick={abrirForm}>
+            <FiPlus /> Nuevo Registro
+          </button>
+        )}
+      </div>
 
       {/* Formulario contextual */}
       {mostrarForm && (
         <form className="reuniones-form" onSubmit={handleGuardar}>
           <div className="form-head">
             <h3>
-              {tab === 'citaciones' && 'Nueva Citación a Apoderado'}
-              {tab === 'generales' && 'Nueva Reunión de Curso'}
-              {tab === 'actas' && 'Nueva Acta Directiva'}
+              {tab === 'citaciones' && (editandoId ? 'Editar Citación a Apoderado' : 'Nueva Citación a Apoderado')}
+              {tab === 'generales' && (editandoId ? 'Editar Reunión de Curso' : 'Nueva Reunión de Curso')}
+              {tab === 'actas' && (editandoId ? 'Editar Acta Directiva' : 'Nueva Acta Directiva')}
             </h3>
-            <button type="button" className="btn-cerrar" onClick={() => setMostrarForm(false)}><FiX /></button>
+            <button type="button" className="btn-cerrar" onClick={() => { setMostrarForm(false); setEditandoId(null) }}><FiX /></button>
           </div>
 
           <div className="form-grid">
@@ -335,7 +362,7 @@ export default function Reuniones() {
         </div>
       ) : (
         <div className="reuniones-lista">
-          {tab === 'citaciones' && citaciones.map((c) => (
+          {tab === 'citaciones' && citacionesF.map((c) => (
             <article className="reunion-card" key={c.idReunion}>
               <div className="card-main">
                 <div className="card-titulo">
@@ -351,13 +378,16 @@ export default function Reuniones() {
               <div className="card-side">
                 <EstadoChip estado={c.estado} />
                 {puedeGestionar && (
-                  <button className="btn-del" onClick={() => handleEliminar(c.idReunion)} title="Eliminar"><FiTrash2 /></button>
+                  <div className="card-botones">
+                    <button className="btn-edit" onClick={() => abrirEditar(c)} title="Modificar"><FiEdit2 /></button>
+                    <button className="btn-del" onClick={() => handleEliminar(c.idReunion)} title="Eliminar"><FiTrash2 /></button>
+                  </div>
                 )}
               </div>
             </article>
           ))}
 
-          {tab === 'generales' && generales.map((g) => (
+          {tab === 'generales' && generalesF.map((g) => (
             <article className="reunion-card" key={g.idReunion}>
               <div className="card-main">
                 <div className="card-titulo">
@@ -372,13 +402,16 @@ export default function Reuniones() {
               <div className="card-side">
                 <EstadoChip estado={g.estado} />
                 {puedeGestionar && (
-                  <button className="btn-del" onClick={() => handleEliminar(g.idReunion)} title="Eliminar"><FiTrash2 /></button>
+                  <div className="card-botones">
+                    <button className="btn-edit" onClick={() => abrirEditar(g)} title="Modificar"><FiEdit2 /></button>
+                    <button className="btn-del" onClick={() => handleEliminar(g.idReunion)} title="Eliminar"><FiTrash2 /></button>
+                  </div>
                 )}
               </div>
             </article>
           ))}
 
-          {tab === 'actas' && actas.map((a) => (
+          {tab === 'actas' && actasF.map((a) => (
             <article className="reunion-card" key={a.idActa}>
               <div className="card-main">
                 <div className="card-titulo">
@@ -391,7 +424,10 @@ export default function Reuniones() {
               </div>
               <div className="card-side">
                 {puedeGestionar && (
-                  <button className="btn-del" onClick={() => handleEliminar(a.idActa)} title="Eliminar"><FiTrash2 /></button>
+                  <div className="card-botones">
+                    <button className="btn-edit" onClick={() => abrirEditar(a)} title="Modificar"><FiEdit2 /></button>
+                    <button className="btn-del" onClick={() => handleEliminar(a.idActa)} title="Eliminar"><FiTrash2 /></button>
+                  </div>
                 )}
               </div>
             </article>

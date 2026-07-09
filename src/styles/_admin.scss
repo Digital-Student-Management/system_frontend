@@ -299,8 +299,9 @@
   border-radius: $radius-full;
   text-transform: uppercase;
 
-  &.activo { background-color: rgba($color-exito, 0.14); color: $color-exito; }
-  &.inactivo { background-color: rgba($color-error, 0.12); color: $color-error; }
+  &.activo, &.vigente, &.renovada { background-color: rgba($color-exito, 0.14); color: $color-exito; }
+  &.inactivo, &.retirada { background-color: rgba($color-error, 0.12); color: $color-error; }
+  &.pendiente { background-color: rgba($color-advertencia, 0.16); color: $color-advertencia; }
 }
 
 // ── Estado vacío ──────────────────────────────────────────────────────────────

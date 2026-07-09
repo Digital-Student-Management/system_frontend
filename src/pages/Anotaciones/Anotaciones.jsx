@@ -9,9 +9,10 @@ import {
   FiPlus, 
   FiUser, 
   FiCalendar, 
-  FiBookOpen, 
+  FiBookOpen,
   FiSave,
-  FiArrowLeft
+  FiArrowLeft,
+  FiDownload
 } from 'react-icons/fi'
 import { useAuth } from '../../hooks/useAuth'
 import { 
@@ -183,6 +184,56 @@ export default function Anotaciones() {
   const positivas = anotaciones.filter(a => a.tipoAnotacion === 'POSITIVA').length
   const negativas = anotaciones.filter(a => a.tipoAnotacion === 'NEGATIVA').length
 
+  // Descargar Hoja de Vida: genera un documento imprimible (guardable como PDF)
+  const handleDescargarHoja = () => {
+    const est = estudiantes.find(e => String(e.id) === String(estudianteSeleccionado))
+    if (!est) return
+    const filas = anotaciones.length > 0
+      ? anotaciones.map(a => `
+          <tr>
+            <td>${a.tipoAnotacion}</td>
+            <td>${(a.descripcionAnotacion || '').replace(/</g, '&lt;')}</td>
+            <td>${a.fecha ? dayjs(a.fecha).format('DD/MM/YYYY') : ''}</td>
+          </tr>`).join('')
+      : '<tr><td colspan="3" style="text-align:center;color:#888">Sin anotaciones registradas</td></tr>'
+
+    const html = `
+      <html><head><meta charset="utf-8"><title>Hoja de Vida - ${est.nombreCompleto}</title>
+      <style>
+        body{font-family:Arial,Helvetica,sans-serif;color:#0F172A;padding:40px;max-width:800px;margin:0 auto}
+        h1{color:#2563EB;font-size:22px;margin-bottom:4px}
+        .sub{color:#64748B;font-size:13px;margin-bottom:24px}
+        .datos{background:#F1F5F9;border-radius:8px;padding:16px;margin-bottom:20px;font-size:14px}
+        .datos strong{color:#0F172A}
+        h2{font-size:15px;margin:24px 0 8px;border-bottom:2px solid #E2E8F0;padding-bottom:6px}
+        table{width:100%;border-collapse:collapse;font-size:13px}
+        th{background:#2563EB;color:#fff;text-align:left;padding:8px}
+        td{border-bottom:1px solid #E2E8F0;padding:8px}
+        .obs{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;padding:14px;font-size:14px;line-height:1.5}
+        .foot{margin-top:30px;font-size:11px;color:#94A3B8;text-align:center}
+      </style></head><body>
+        <h1>Hoja de Vida del Estudiante</h1>
+        <div class="sub">Colegio Bernardo O'Higgins · Emitido el ${dayjs().format('DD/MM/YYYY')}</div>
+        <div class="datos">
+          <strong>Estudiante:</strong> ${est.nombreCompleto}<br/>
+          <strong>RUT:</strong> ${est.rut || '—'}<br/>
+          <strong>Resumen conductual:</strong> ${positivas} positiva(s), ${negativas} negativa(s)
+        </div>
+        <h2>Observación General de Convivencia</h2>
+        <div class="obs">${(hojaVida?.observacionGeneral || 'Sin comentarios registrados.').replace(/</g, '&lt;')}</div>
+        <h2>Historial de Anotaciones</h2>
+        <table><thead><tr><th>Tipo</th><th>Descripción</th><th>Fecha</th></tr></thead><tbody>${filas}</tbody></table>
+        <div class="foot">Documento generado desde el Sistema de Gestión Escolar Digital.</div>
+      </body></html>`
+
+    const win = window.open('', '_blank')
+    if (!win) { toast.error('Habilita las ventanas emergentes para descargar la hoja.'); return }
+    win.document.write(html)
+    win.document.close()
+    win.focus()
+    setTimeout(() => win.print(), 400)
+  }
+
   return (
     <div className="anotaciones-container">
       <header className="anotaciones-header">
@@ -270,7 +321,12 @@ export default function Anotaciones() {
             
             {/* Historial / Timeline de anotaciones */}
             <div className="anotaciones-list-panel">
-              <h3>Hoja de Vida — Historial Conductual</h3>
+              <div className="list-panel-head">
+                <h3>Hoja de Vida — Historial Conductual</h3>
+                <button type="button" className="btn-descargar-hoja" onClick={handleDescargarHoja} title="Descargar / Imprimir hoja de vida">
+                  <FiDownload /> Descargar Hoja
+                </button>
+              </div>
               {anotaciones.length > 0 ? (
                 <div className="anotaciones-timeline">
                   {anotaciones.map((anot) => (

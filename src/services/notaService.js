@@ -82,6 +82,11 @@ export const updateNota = (id, data) => {
   })
 }
 
+export const deleteNota = (id) => {
+  // DELETE /nota/{id}
+  return api.delete(`/notas/${id}`)
+}
+
 export const getPromedios = async (cursoId, asignaturaId) => {
   try {
     // 1. Obtener todas las evaluaciones asociadas a la asignatura

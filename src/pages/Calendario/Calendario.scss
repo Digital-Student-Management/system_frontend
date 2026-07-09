@@ -1,0 +1,130 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.calendario-container {
+  padding: $spacing-xl;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  .cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .icon-title { font-size: 2.2rem; color: $color-primario; }
+
+      h1 { font-family: $font-display; font-size: 2rem; font-weight: 800; color: $color-texto-oscuro; letter-spacing: -0.5px; margin-bottom: 4px; }
+      p { font-size: 0.95rem; color: $color-texto-mutado; }
+    }
+
+    .btn-back-home {
+      display: flex; align-items: center; gap: 8px; padding: 10px 18px;
+      background-color: $color-blanco; border: 1px solid $color-borde; border-radius: $radius-md;
+      color: $color-texto-suave; font-weight: 600; font-size: 0.9rem; text-decoration: none; box-shadow: $shadow-sm;
+      transition: border-color $transition-fast, color $transition-fast;
+      svg { transition: transform $transition-fast; }
+      &:hover { border-color: $color-primario; color: $color-primario; svg { transform: translateX(-2px); } }
+    }
+  }
+
+  .btn-nuevo-evento { @include btn-primary; align-self: flex-start; }
+
+  .cal-form {
+    @include card;
+    padding: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    border-color: rgba($color-primario, 0.3);
+
+    .form-head {
+      display: flex; align-items: center; justify-content: space-between;
+      h3 { font-family: $font-display; font-size: 1.1rem; font-weight: 700; color: $color-primario; }
+      .btn-cerrar { background: none; border: none; cursor: pointer; color: $color-texto-mutado; font-size: 1.2rem; display: flex; &:hover { color: $color-error; } }
+    }
+
+    .form-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: $spacing-md;
+      .input-group {
+        display: flex; flex-direction: column; gap: 6px;
+        &.full { grid-column: 1 / -1; }
+        label { font-size: 0.85rem; font-weight: 600; color: $color-texto-oscuro; }
+        input, textarea { @include form-input; resize: vertical; }
+      }
+    }
+
+    .form-actions { display: flex; gap: $spacing-sm; .btn-guardar { @include btn-primary; } .btn-cancelar { @include btn-ghost; } }
+  }
+
+  .cal-lista { display: flex; flex-direction: column; gap: $spacing-md; }
+
+  .cal-evento {
+    @include card;
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    padding: $spacing-md $spacing-lg;
+    transition: box-shadow $transition-fast, transform $transition-fast;
+
+    &:hover { box-shadow: $shadow-md; transform: translateY(-2px); }
+    &.pasado { opacity: 0.6; }
+
+    .cal-fecha-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border-radius: $radius-md;
+      background: linear-gradient(135deg, $color-primario, $color-secundario);
+      color: $color-blanco;
+      flex-shrink: 0;
+
+      .dia { font-size: 1.5rem; font-weight: 800; line-height: 1; }
+      .mes { font-size: 0.72rem; text-transform: uppercase; font-weight: 600; }
+    }
+
+    .cal-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      h3 { font-family: $font-display; font-size: 1.1rem; font-weight: 700; color: $color-texto-oscuro; }
+      .cal-desc { font-size: 0.9rem; color: $color-texto-suave; }
+      .cal-rango { display: inline-flex; align-items: center; gap: 5px; font-size: 0.8rem; color: $color-texto-mutado; margin-top: 2px; svg { color: $color-primario; opacity: 0.7; } }
+    }
+
+    .cal-acciones {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+
+      button {
+        width: 34px; height: 34px; border-radius: $radius-md; border: 1px solid $color-borde;
+        background: $color-blanco; color: $color-texto-suave; cursor: pointer;
+        @include flex-center; transition: $transition-fast;
+        &:hover { border-color: $color-primario; color: $color-primario; }
+        &.del:hover { border-color: $color-error; color: $color-error; }
+      }
+    }
+  }
+
+  .cal-empty {
+    @include card;
+    padding: 60px 40px; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: $spacing-md; color: $color-texto-mutado;
+    .empty-icon { font-size: 3rem; opacity: 0.5; }
+  }
+}

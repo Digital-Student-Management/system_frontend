@@ -440,6 +440,14 @@ export default function Dashboard() {
           <Link to="/reuniones" className="nav-link">
             <FiCalendar /> Reuniones
           </Link>
+          <Link to="/calendario" className="nav-link">
+            <FiCalendar /> Calendario
+          </Link>
+          {(usuario.rol === 'ADMIN' || usuario.rol === 'DIRECTIVO' || usuario.rol === 'FUNCIONARIO' || usuario.rol === 'APODERADO') && (
+            <Link to="/matriculas" className="nav-link">
+              <FiFileText /> Matrículas
+            </Link>
+          )}
           <Link to="/mural" className="nav-link">
             <FiGrid /> Mural
           </Link>

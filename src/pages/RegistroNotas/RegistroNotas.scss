@@ -415,6 +415,24 @@
           background-color: $color-blanco;
         }
       }
+
+      // Botón eliminar calificación
+      .btn-del-nota {
+        width: 34px;
+        height: 34px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        background-color: $color-blanco;
+        color: $color-texto-mutado;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color $transition-fast, color $transition-fast;
+
+        &:hover:not(:disabled) { border-color: $color-peligro; color: $color-peligro; }
+        &:disabled { opacity: 0.35; cursor: not-allowed; }
+      }
     }
 
     // Botón Guardar

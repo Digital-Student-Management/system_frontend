@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { FiUsers, FiArrowLeft, FiTrash2, FiSearch, FiAlertTriangle, FiInfo } from 'react-icons/fi'
+import { FiUsers, FiArrowLeft, FiTrash2, FiAlertTriangle, FiInfo, FiPlus, FiX, FiUserPlus } from 'react-icons/fi'
 import { useAuth } from '../../hooks/useAuth'
 import { getAll, remove } from '../../services/usuarioService'
+import { registerUser } from '../../services/authService'
+import { formatearRut } from '../../validators/rutValidators'
 
 const ROLES_ADMIN = ['ADMIN', 'DIRECTIVO']
-const TIPOS = ['TODOS', 'ESTUDIANTE', 'APODERADO', 'DOCENTE', 'INSPECTOR', 'DIRECTIVO']
+const TIPOS = ['TODOS', 'ESTUDIANTE', 'APODERADO', 'DOCENTE', 'INSPECTOR', 'DIRECTIVO', 'FUNCIONARIO']
+const ROLES_CREABLES = ['ESTUDIANTE', 'APODERADO', 'DOCENTE', 'INSPECTOR', 'DIRECTIVO', 'FUNCIONARIO']
+const FORM_VACIO = { nombreCompleto: '', rut: '', email: '', password: '', rol: 'DOCENTE' }
 
 export default function AdminUsuarios() {
   const { usuario } = useAuth()
@@ -14,6 +18,8 @@ export default function AdminUsuarios() {
   const [loading, setLoading] = useState(true)
   const [busqueda, setBusqueda] = useState('')
   const [filtroTipo, setFiltroTipo] = useState('TODOS')
+  const [mostrarForm, setMostrarForm] = useState(false)
+  const [form, setForm] = useState(FORM_VACIO)
 
   const cargar = async () => {
     setLoading(true)
@@ -27,6 +33,40 @@ export default function AdminUsuarios() {
   }
 
   useEffect(() => { cargar() }, [])
+
+  // Crear usuario (incluye personal). Funciona porque el token del admin autenticado
+  // se adjunta automáticamente en axiosConfig y el backend autoriza roles privilegiados.
+  const handleCrear = async (e) => {
+    e.preventDefault()
+    if (!form.nombreCompleto.trim() || !form.rut.trim() || !form.email.trim() || !form.password) {
+      toast.warning('Completa todos los campos.')
+      return
+    }
+    if (form.password.length < 6) {
+      toast.warning('La contraseña debe tener al menos 6 caracteres.')
+      return
+    }
+    setLoading(true)
+    try {
+      await registerUser({
+        nombreCompleto: form.nombreCompleto.trim(),
+        rut: form.rut.trim(),
+        email: form.email.trim(),
+        password: form.password,
+        rol: form.rol
+      })
+      toast.success(`Usuario ${form.rol} creado correctamente.`)
+      setForm(FORM_VACIO)
+      setMostrarForm(false)
+      cargar()
+    } catch (err) {
+      const status = err.response?.status
+      if (status === 409) toast.error('El RUT o correo ya está registrado.')
+      else if (status === 403) toast.error('No tienes permisos para crear este tipo de cuenta.')
+      else toast.error(err.response?.data?.message || 'No se pudo crear el usuario.')
+      console.error('Error creando usuario:', err)
+    } finally { setLoading(false) }
+  }
 
   const handleEliminar = async (id, nombre) => {
     if (String(id) === String(usuario?.id)) {
@@ -66,7 +106,7 @@ export default function AdminUsuarios() {
           <FiUsers className="icon-title" />
           <div>
             <h1>Gestión de Usuarios</h1>
-            <p>Directorio de cuentas del sistema. Las nuevas cuentas se crean desde el registro.</p>
+            <p>Directorio de cuentas. Como administrador puedes crear cuentas de personal aquí.</p>
           </div>
         </div>
         <Link to="/admin" className="btn-back-home"><FiArrowLeft /> Volver al Panel</Link>
@@ -79,10 +119,45 @@ export default function AdminUsuarios() {
             {TIPOS.map((t) => <option key={t} value={t}>{t === 'TODOS' ? 'Todos los roles' : t}</option>)}
           </select>
         </div>
-        <span style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: 6, color: '#64748B' }}>
-          <FiSearch /> {filtrados.length} de {usuarios.length}
-        </span>
+        {!mostrarForm && <button className="btn-add" onClick={() => setMostrarForm(true)}><FiUserPlus /> Nuevo Usuario</button>}
       </div>
+
+      {mostrarForm && (
+        <form className="admin-form" onSubmit={handleCrear}>
+          <div className="form-head">
+            <h3>Crear Nueva Cuenta</h3>
+            <button type="button" className="btn-cerrar" onClick={() => { setMostrarForm(false); setForm(FORM_VACIO) }}><FiX /></button>
+          </div>
+          <div className="form-grid">
+            <div className="input-group">
+              <label>Nombre completo</label>
+              <input type="text" placeholder="Juan Pérez González" value={form.nombreCompleto} onChange={(e) => setForm({ ...form, nombreCompleto: e.target.value })} required />
+            </div>
+            <div className="input-group">
+              <label>RUT</label>
+              <input type="text" maxLength={12} placeholder="12.345.678-5" value={form.rut} onChange={(e) => setForm({ ...form, rut: formatearRut(e.target.value) })} required />
+            </div>
+            <div className="input-group">
+              <label>Correo</label>
+              <input type="email" placeholder="correo@colegio.cl" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+            </div>
+            <div className="input-group">
+              <label>Contraseña temporal</label>
+              <input type="text" placeholder="Mínimo 6 caracteres" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+            </div>
+            <div className="input-group">
+              <label>Rol</label>
+              <select value={form.rol} onChange={(e) => setForm({ ...form, rol: e.target.value })}>
+                {ROLES_CREABLES.map((r) => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </div>
+            <div className="form-actions">
+              <button type="submit" className="btn-guardar" disabled={loading}><FiPlus /> Crear Cuenta</button>
+              <button type="button" className="btn-cancelar" onClick={() => { setMostrarForm(false); setForm(FORM_VACIO) }}>Cancelar</button>
+            </div>
+          </div>
+        </form>
+      )}
 
       {loading && usuarios.length === 0 ? (
         <div className="admin-empty"><p>Cargando…</p></div>
