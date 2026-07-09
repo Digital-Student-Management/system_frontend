@@ -6,12 +6,16 @@ import api from './axiosConfig'
 // ---------------------------------------------------------------------------
 
 // Evaluaciones
+// Si se pasa un asignaturaId válido (> 0) filtra por asignatura;
+// si se pasa 0, null o undefined, devuelve TODAS las evaluaciones.
 export const getEvaluaciones = async (asignaturaId) => {
   try {
     const response = await api.get('/evaluaciones')
-    // Filtrado en el cliente para mantener el MS intacto
-    const filtered = response.data.filter(e => e.idAsignatura === parseInt(asignaturaId))
-    return { ...response, data: filtered }
+    const id = parseInt(asignaturaId)
+    const data = id > 0
+      ? response.data.filter(e => e.idAsignatura === id)
+      : response.data
+    return { ...response, data }
   } catch (error) {
     console.error('Error fetching evaluaciones, returning empty list:', error)
     return { data: [] }

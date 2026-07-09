@@ -52,12 +52,12 @@ export default function Login() {
     setValue('rut', formatearRut(rawValue), { shouldValidate: true })
   }
 
-  // Submit del formulario (maneja login y registro contra API con fallback simulado para pruebas locales)
+  // Submit del formulario. La autenticación es SIEMPRE contra el backend real
+  // (ms-usuarios): no existe modo simulado ni bypass del lado del cliente.
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
       if (isRegistering) {
-        // Datos de registro para enviar
         const registerData = {
           nombreCompleto: data.nombreCompleto,
           rut: data.rut,
@@ -65,74 +65,45 @@ export default function Login() {
           password: data.password,
           rol: data.rol
         }
-
-        try {
-          const response = await registerUser(registerData)
-          const registered = response.data.user || response.data
-          toast.success(`¡Registro exitoso en MySQL! Usuario creado como ${registered.rol || data.rol}. Ya puedes ingresar.`)
-          setIsRegistering(false)
-          reset()
-        } catch (apiError) {
-          console.warn('API Register falló, usando simulación local para pruebas:', apiError)
-          toast.success(`[Modo Simulado] ¡Registro exitoso! Usuario con RUT ${data.rut} registrado como ${data.rol}.`)
-          setIsRegistering(false)
-          reset()
-        }
+        const response = await registerUser(registerData)
+        const registered = response.data.user || response.data
+        toast.success(`¡Registro exitoso! Cuenta creada como ${registered.rol || data.rol}. Ya puedes ingresar.`)
+        setIsRegistering(false)
+        reset()
       } else {
-        // Datos de inicio de sesión para enviar
         const loginData = {
           rut: loginMethod === 'rut' ? data.rut : '',
           email: loginMethod === 'email' ? data.email : '',
           password: data.password
         }
+        const response = await apiLogin(loginData)
+        const { token, user } = response.data
 
-        try {
-          const response = await apiLogin(loginData)
-          const { token, user } = response.data
-          
-          login(token, user)
-          toast.success(`¡Bienvenido(a) (Autenticado en MySQL), ${user.nombre}!`)
-          
-          const from = location.state?.from?.pathname || '/'
-          navigate(from, { replace: true })
-        } catch (apiError) {
-          console.warn('API Login falló, usando bypass de desarrollo:', apiError)
-          
-          // Fallback a simulación
-          const selectedRole = data.bypassRole || 'DOCENTE'
-          const mockUser = {
-            rut: loginMethod === 'rut' ? data.rut : '19.876.543-K',
-            nombre: `Usuario Simulado (${selectedRole})`,
-            email: loginMethod === 'email' ? data.email : 'contacto@colegio.cl',
-            rol: selectedRole
-          }
+        login(token, user)
+        toast.success(`¡Bienvenido(a), ${user.nombre}!`)
 
-          login('mock-jwt-token-dev-purposes-only', mockUser)
-          toast.info(`[Modo Simulado] Bienvenido(a), ${mockUser.nombre}`)
-          
-          const from = location.state?.from?.pathname || '/'
-          navigate(from, { replace: true })
-        }
+        const from = location.state?.from?.pathname || '/'
+        navigate(from, { replace: true })
       }
     } catch (error) {
       console.error('Auth error:', error)
-      toast.error('Ocurrió un error inesperado.')
+      const status = error.response?.status
+      const backendMsg = error.response?.data?.message || error.response?.data?.error
+
+      if (status === 401) {
+        toast.error('Credenciales incorrectas. Verifica tus datos e intenta nuevamente.')
+      } else if (status === 409) {
+        toast.error(backendMsg || 'El RUT o correo ya está registrado.')
+      } else if (status === 400) {
+        toast.error(backendMsg || 'Datos inválidos. Revisa el formulario.')
+      } else if (error.response) {
+        toast.error(backendMsg || 'Ocurrió un error en el servidor.')
+      } else {
+        toast.error('No se pudo conectar con el servidor. Verifica tu conexión.')
+      }
     } finally {
       setIsLoading(false)
     }
-  }
-
-  // Función auxiliar para iniciar sesión rápido por rol
-  const handleQuickLogin = (role) => {
-    setValue('bypassRole', role)
-    if (loginMethod === 'rut') {
-      setValue('rut', '12.345.678-5')
-    } else {
-      setValue('email', `${role.toLowerCase()}@colegio.cl`)
-    }
-    setValue('password', 'Password123')
-    
-    handleSubmit(onSubmit)()
   }
 
   return (
@@ -226,6 +197,8 @@ export default function Login() {
                   className={errors.rol ? 'error' : ''}
                   disabled={isLoading}
                 >
+                  {/* El registro crea subtipos reales en ms-usuarios. ADMIN se omite
+                      del auto-registro (las cuentas de administrador las crea otro admin). */}
                   <option value="ESTUDIANTE">Estudiante</option>
                   <option value="APODERADO">Apoderado</option>
                   <option value="DOCENTE">Docente</option>
@@ -319,8 +292,6 @@ export default function Login() {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
-              <input type="hidden" {...register('bypassRole')} defaultValue="DOCENTE" />
-
               {loginMethod === 'rut' && (
                 <div className="form-group">
                   <label htmlFor="rut">RUT Institucional</label>
@@ -399,34 +370,6 @@ export default function Login() {
               <button type="button" onClick={handleToggleMode} disabled={isLoading}>
                 Regístrate aquí
               </button>
-            </div>
-
-            {/* Panel de Acceso Rápido */}
-            <div className="dev-bypass-panel">
-              <h3>Acceso Rápido de Prueba</h3>
-              <div className="roles-grid">
-                <button type="button" onClick={() => handleQuickLogin('ESTUDIANTE')}>
-                  Estudiante
-                </button>
-                <button type="button" onClick={() => handleQuickLogin('DOCENTE')}>
-                  Docente
-                </button>
-                <button type="button" onClick={() => handleQuickLogin('APODERADO')}>
-                  Apoderado
-                </button>
-                <button type="button" onClick={() => handleQuickLogin('INSPECTOR')}>
-                  Inspector
-                </button>
-                <button type="button" onClick={() => handleQuickLogin('DIRECTIVO')}>
-                  Directivo
-                </button>
-                <button type="button" onClick={() => handleQuickLogin('FUNCIONARIO')}>
-                  Funcionario
-                </button>
-                <button type="button" onClick={() => handleQuickLogin('ADMIN')}>
-                  Admin
-                </button>
-              </div>
             </div>
           </div>
         )}

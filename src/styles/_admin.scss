@@ -1,0 +1,368 @@
+// =============================================================================
+// _admin.scss — Estilos compartidos del Panel de Administración.
+// Clases reutilizadas por AdminPanel, AdminUsuarios, AdminCursos,
+// AdminAsignaturas y AdminSalas para mantener una estética uniforme.
+// =============================================================================
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'sass:color';
+
+.admin-container {
+  padding: $spacing-xl;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+
+  .title-section {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+
+    .icon-title { font-size: 2.2rem; color: $color-primario; }
+
+    h1 {
+      font-family: $font-display;
+      font-size: 2rem;
+      font-weight: 800;
+      color: $color-texto-oscuro;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    p { font-size: 0.95rem; color: $color-texto-mutado; }
+  }
+
+  .btn-back-home {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background-color: $color-blanco;
+    border: 1px solid $color-borde;
+    border-radius: $radius-md;
+    color: $color-texto-suave;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    box-shadow: $shadow-sm;
+    transition: border-color $transition-fast, color $transition-fast;
+
+    svg { transition: transform $transition-fast; }
+    &:hover { border-color: $color-primario; color: $color-primario; svg { transform: translateX(-2px); } }
+  }
+}
+
+// ── Barra de acciones (buscador / botón agregar) ──────────────────────────────
+.admin-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+  }
+
+  .admin-search {
+    @include form-input;
+    width: auto;
+    min-width: 260px;
+  }
+
+  .admin-filter {
+    @include form-input;
+    width: auto;
+  }
+
+  .btn-add {
+    @include btn-primary;
+  }
+}
+
+// ── Estadísticas ──────────────────────────────────────────────────────────────
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: $spacing-md;
+}
+
+.admin-stat-card {
+  @include card;
+  padding: $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  .stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: $radius-md;
+    @include flex-center;
+    font-size: 1.5rem;
+    background: rgba($color-primario, 0.1);
+    color: $color-primario;
+    flex-shrink: 0;
+  }
+
+  .stat-info {
+    display: flex;
+    flex-direction: column;
+
+    .stat-value { font-size: 1.8rem; font-weight: 800; color: $color-texto-oscuro; line-height: 1; }
+    .stat-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; color: $color-texto-mutado; margin-top: 4px; }
+  }
+}
+
+// ── Accesos rápidos del hub (AdminPanel) ──────────────────────────────────────
+.admin-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: $spacing-lg;
+}
+
+.admin-module-card {
+  @include card;
+  padding: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  text-decoration: none;
+  color: inherit;
+  transition: transform $transition-fast, box-shadow $transition-fast, border-color $transition-fast;
+
+  &:hover { transform: translateY(-4px); box-shadow: $shadow-md; border-color: $color-primario; }
+
+  .module-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: $radius-lg;
+    @include flex-center;
+    font-size: 1.7rem;
+    background: linear-gradient(135deg, $color-primario, $color-secundario);
+    color: $color-blanco;
+    margin-bottom: $spacing-sm;
+  }
+
+  h3 { font-family: $font-display; font-size: 1.15rem; font-weight: 700; color: $color-texto-oscuro; }
+  p { font-size: 0.88rem; color: $color-texto-mutado; line-height: 1.5; }
+}
+
+// ── Formulario en tarjeta ─────────────────────────────────────────────────────
+.admin-form {
+  background-color: rgba($color-primario, 0.03);
+  border: 1px dashed rgba($color-primario, 0.28);
+  border-radius: $radius-lg;
+  padding: $spacing-lg $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .form-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 { font-family: $font-display; font-size: 1.15rem; font-weight: 700; color: $color-primario; }
+
+    .btn-cerrar {
+      background: none; border: none; cursor: pointer;
+      color: $color-texto-mutado; font-size: 1.2rem; display: flex;
+      &:hover { color: $color-error; }
+    }
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-md;
+    align-items: flex-end;
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      &.full { grid-column: 1 / -1; }
+
+      label { font-size: 0.85rem; font-weight: 600; color: $color-texto-oscuro; }
+
+      input, select, textarea {
+        @include form-input;
+        resize: vertical;
+      }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: $spacing-sm;
+
+    .btn-guardar { @include btn-primary; }
+    .btn-cancelar { @include btn-ghost; }
+  }
+}
+
+// ── Tabla de administración ───────────────────────────────────────────────────
+.admin-table-wrap {
+  @include card;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+
+  th {
+    padding: 14px 18px;
+    background-color: rgba($color-fondo, 0.7);
+    color: $color-texto-oscuro;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid $color-borde;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 18px;
+    border-bottom: 1px solid $color-borde;
+    font-size: 0.92rem;
+    color: $color-texto-oscuro;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background-color: rgba($color-primario, 0.03); }
+
+  .mono { font-family: $font-mono; color: $color-texto-mutado; }
+
+  .row-actions {
+    display: flex;
+    gap: 6px;
+
+    button {
+      width: 34px;
+      height: 34px;
+      border-radius: $radius-md;
+      border: 1px solid $color-borde;
+      background: $color-blanco;
+      color: $color-texto-suave;
+      cursor: pointer;
+      @include flex-center;
+      transition: $transition-fast;
+
+      &:hover { border-color: $color-primario; color: $color-primario; }
+      &.del:hover { border-color: $color-error; color: $color-error; }
+    }
+  }
+}
+
+// ── Badges de rol / estado ────────────────────────────────────────────────────
+.rol-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: $radius-full;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+
+  &.estudiante { background-color: rgba($color-secundario, 0.15); color: $color-secundario; }
+  &.docente { background-color: rgba($color-primario, 0.15); color: $color-primario; }
+  &.apoderado { background-color: rgba($color-exito, 0.15); color: $color-exito; }
+  &.inspector { background-color: rgba($color-advertencia, 0.15); color: $color-advertencia; }
+  &.directivo { background-color: rgba(139, 92, 246, 0.15); color: rgb(109, 40, 217); }
+  &.funcionario { background-color: rgba(236, 72, 153, 0.15); color: rgb(190, 24, 74); }
+  &.admin { background-color: rgba($color-error, 0.15); color: $color-error; }
+}
+
+.estado-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: $radius-full;
+  text-transform: uppercase;
+
+  &.activo { background-color: rgba($color-exito, 0.14); color: $color-exito; }
+  &.inactivo { background-color: rgba($color-error, 0.12); color: $color-error; }
+}
+
+// ── Estado vacío ──────────────────────────────────────────────────────────────
+.admin-empty {
+  @include card;
+  padding: 60px 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  color: $color-texto-mutado;
+
+  .empty-icon { font-size: 3rem; opacity: 0.5; }
+  p { max-width: 480px; line-height: 1.6; }
+}
+
+// ── Bloques agrupados (p.ej. Cursos + Niveles) ────────────────────────────────
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-family: $font-display;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $color-texto-oscuro;
+
+    svg { color: $color-primario; }
+  }
+}
+
+// ── Acceso denegado ───────────────────────────────────────────────────────────
+.admin-forbidden {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: $spacing-md;
+  padding: $spacing-xl;
+
+  .icon-warn { font-size: 4rem; color: $color-alerta; }
+  h2 { font-family: $font-display; font-size: 1.8rem; color: $color-texto-oscuro; font-weight: 800; }
+  p { color: $color-texto-mutado; max-width: 450px; }
+
+  .btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: $spacing-md;
+    padding: 10px 18px;
+    border: 1px solid $color-borde;
+    border-radius: $radius-md;
+    color: $color-texto-suave;
+    text-decoration: none;
+    font-weight: 600;
+    &:hover { border-color: $color-primario; color: $color-primario; }
+  }
+}

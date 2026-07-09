@@ -17,7 +17,8 @@ import {
   FiLayers,
   FiHome,
   FiMenu,
-  FiX
+  FiX,
+  FiSettings
 } from 'react-icons/fi'
 import {
   BarChart,
@@ -445,6 +446,11 @@ export default function Dashboard() {
           <Link to="/mensajeria" className="nav-link">
             <FiMail /> Mensajería
           </Link>
+          {(usuario.rol === 'ADMIN' || usuario.rol === 'DIRECTIVO') && (
+            <Link to="/admin" className="nav-link nav-link-admin">
+              <FiSettings /> Administración
+            </Link>
+          )}
         </div>
 
         {/* Fondo semitransparente al abrir el menú en pantallas pequeñas */}

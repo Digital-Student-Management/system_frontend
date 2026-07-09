@@ -15,6 +15,11 @@ import MisCursos from './pages/MisCursos/MisCursos'
 import BitacoraAsignatura from './pages/BitacoraAsignatura/BitacoraAsignatura'
 import Mural from './pages/Mural/Mural'
 import Reuniones from './pages/Reuniones/Reuniones'
+import AdminPanel from './pages/AdminPanel/AdminPanel'
+import AdminUsuarios from './pages/AdminUsuarios/AdminUsuarios'
+import AdminCursos from './pages/AdminCursos/AdminCursos'
+import AdminAsignaturas from './pages/AdminAsignaturas/AdminAsignaturas'
+import AdminSalas from './pages/AdminSalas/AdminSalas'
 
 // Roles del sistema: ESTUDIANTE, DOCENTE, APODERADO, INSPECTOR, DIRECTIVO, FUNCIONARIO, ADMIN
 
@@ -132,6 +137,48 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Reuniones />
+              </PrivateRoute>
+            }
+          />
+
+          {/* ───── Panel de Administración (ADMIN y DIRECTIVO) ───── */}
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute roles={['ADMIN', 'DIRECTIVO']}>
+                <AdminPanel />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/usuarios"
+            element={
+              <PrivateRoute roles={['ADMIN', 'DIRECTIVO']}>
+                <AdminUsuarios />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/cursos"
+            element={
+              <PrivateRoute roles={['ADMIN', 'DIRECTIVO']}>
+                <AdminCursos />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/asignaturas"
+            element={
+              <PrivateRoute roles={['ADMIN', 'DIRECTIVO']}>
+                <AdminAsignaturas />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/salas"
+            element={
+              <PrivateRoute roles={['ADMIN', 'DIRECTIVO']}>
+                <AdminSalas />
               </PrivateRoute>
             }
           />
