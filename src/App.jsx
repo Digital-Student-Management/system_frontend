@@ -9,6 +9,12 @@ import RegistroNotas from './pages/RegistroNotas/RegistroNotas'
 import MisNotas from './pages/MisNotas/MisNotas'
 import Anotaciones from './pages/Anotaciones/Anotaciones'
 import Mensajeria from './pages/Mensajeria/Mensajeria'
+import MiPerfil from './pages/MiPerfil/MiPerfil'
+import MiEstudiante from './pages/MiEstudiante/MiEstudiante'
+import MisCursos from './pages/MisCursos/MisCursos'
+import BitacoraAsignatura from './pages/BitacoraAsignatura/BitacoraAsignatura'
+import Mural from './pages/Mural/Mural'
+import Reuniones from './pages/Reuniones/Reuniones'
 
 // Roles del sistema: ESTUDIANTE, DOCENTE, APODERADO, INSPECTOR, DIRECTIVO, FUNCIONARIO, ADMIN
 
@@ -66,6 +72,66 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Mensajeria />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Mi Perfil (Todos los roles) */}
+          <Route
+            path="/mi-perfil"
+            element={
+              <PrivateRoute>
+                <MiPerfil />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Mi Estudiante / Ficha (Todos los roles) */}
+          <Route
+            path="/mi-estudiante"
+            element={
+              <PrivateRoute>
+                <MiEstudiante />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Mis Cursos y Asignaturas (Todos los roles) */}
+          <Route
+            path="/mis-cursos"
+            element={
+              <PrivateRoute>
+                <MisCursos />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Bitácora de Asignatura (Docentes) */}
+          <Route
+            path="/bitacora-asignatura"
+            element={
+              <PrivateRoute roles={['DOCENTE', 'ADMIN']}>
+                <BitacoraAsignatura />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Mural Digital (Todos los roles) */}
+          <Route
+            path="/mural"
+            element={
+              <PrivateRoute>
+                <Mural />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Ruta Privada: Reuniones y Citaciones (Todos los roles) */}
+          <Route
+            path="/reuniones"
+            element={
+              <PrivateRoute>
+                <Reuniones />
               </PrivateRoute>
             }
           />

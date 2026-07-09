@@ -1,0 +1,188 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.perfil-container {
+  padding: $spacing-xl;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+
+  .perfil-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .icon-title {
+        font-size: 2.2rem;
+        color: $color-primario;
+      }
+
+      h1 {
+        font-family: $font-display;
+        font-size: 2rem;
+        font-weight: 800;
+        color: $color-texto-oscuro;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: $color-texto-mutado;
+      }
+    }
+
+    .btn-back-home {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background-color: $color-blanco;
+      border: 1px solid $color-borde;
+      border-radius: $radius-md;
+      color: $color-texto-suave;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: $shadow-sm;
+      transition: border-color $transition-fast, color $transition-fast;
+
+      svg { transition: transform $transition-fast; }
+
+      &:hover {
+        border-color: $color-primario;
+        color: $color-primario;
+        svg { transform: translateX(-2px); }
+      }
+    }
+  }
+
+  .perfil-card {
+    @include card;
+    overflow: hidden;
+
+    .perfil-banner {
+      display: flex;
+      align-items: center;
+      gap: $spacing-lg;
+      padding: $spacing-xl;
+      background: linear-gradient(135deg, $color-primario, $color-primario-dark);
+      color: $color-blanco;
+
+      .perfil-avatar {
+        width: 84px;
+        height: 84px;
+        border-radius: $radius-full;
+        background: rgba(255, 255, 255, 0.18);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        @include flex-center;
+        font-size: 1.9rem;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+
+      .perfil-identidad {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        h2 {
+          font-family: $font-display;
+          font-size: 1.6rem;
+          font-weight: 800;
+        }
+
+        .rol-badge {
+          align-self: flex-start;
+          padding: 3px 12px;
+          border-radius: $radius-full;
+          font-size: 0.72rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        .estado-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.82rem;
+          font-weight: 600;
+
+          &.activo { color: #BBF7D0; }
+          &.inactivo { color: #FECACA; }
+        }
+      }
+    }
+
+    .perfil-datos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: $spacing-md;
+      padding: $spacing-xl;
+
+      .dato-item {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        padding: $spacing-md;
+        border: 1px solid $color-borde;
+        border-radius: $radius-md;
+        background: $color-fondo;
+
+        .dato-icon {
+          font-size: 1.3rem;
+          color: $color-primario;
+          display: flex;
+          flex-shrink: 0;
+        }
+
+        div {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .dato-label {
+          font-size: 0.72rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          font-weight: 700;
+          color: $color-texto-mutado;
+        }
+
+        .dato-value {
+          font-size: 1rem;
+          font-weight: 600;
+          color: $color-texto-oscuro;
+
+          &.mono { font-family: $font-mono; }
+          &.muted { color: $color-texto-mutado; font-weight: 500; }
+        }
+
+        &.loading-item { grid-column: 1 / -1; justify-content: center; background: transparent; border: none; }
+      }
+    }
+
+    .perfil-footer {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-md $spacing-xl $spacing-xl;
+      color: $color-texto-mutado;
+
+      svg { flex-shrink: 0; color: $color-info; }
+      p { font-size: 0.88rem; line-height: 1.5; }
+    }
+  }
+}

@@ -55,6 +55,14 @@ export default defineConfig({
         target: 'http://localhost:8086',
         changeOrigin: true
       },
+      '/api/murales': {
+        target: 'http://localhost:8087',
+        changeOrigin: true
+      },
+      '/api/reuniones': {
+        target: 'http://localhost:8088',
+        changeOrigin: true
+      },
       '/api': {
         target: 'http://localhost:8089',
         changeOrigin: true

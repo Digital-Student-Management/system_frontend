@@ -1,0 +1,248 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.reuniones-container {
+  padding: $spacing-xl;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  .reuniones-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .icon-title { font-size: 2.2rem; color: $color-primario; }
+
+      h1 {
+        font-family: $font-display;
+        font-size: 2rem;
+        font-weight: 800;
+        color: $color-texto-oscuro;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+
+      p { font-size: 0.95rem; color: $color-texto-mutado; }
+    }
+
+    .btn-back-home {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background-color: $color-blanco;
+      border: 1px solid $color-borde;
+      border-radius: $radius-md;
+      color: $color-texto-suave;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: $shadow-sm;
+      transition: border-color $transition-fast, color $transition-fast;
+
+      svg { transition: transform $transition-fast; }
+      &:hover { border-color: $color-primario; color: $color-primario; svg { transform: translateX(-2px); } }
+    }
+  }
+
+  .reuniones-tabs {
+    display: flex;
+    gap: $spacing-sm;
+    border-bottom: 2px solid $color-borde;
+    flex-wrap: wrap;
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: $color-texto-mutado;
+      transition: color $transition-fast, border-color $transition-fast;
+
+      &:hover { color: $color-primario; }
+      &.active { color: $color-primario; border-bottom-color: $color-primario; }
+    }
+  }
+
+  .btn-nuevo {
+    @include btn-primary;
+    align-self: flex-start;
+  }
+
+  .reuniones-form {
+    @include card;
+    padding: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    border-color: rgba($color-primario, 0.3);
+
+    .form-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h3 { font-family: $font-display; font-size: 1.1rem; font-weight: 700; color: $color-primario; }
+
+      .btn-cerrar {
+        background: none; border: none; cursor: pointer;
+        color: $color-texto-mutado; font-size: 1.2rem; display: flex;
+        &:hover { color: $color-error; }
+      }
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: $spacing-md;
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        &.full { grid-column: 1 / -1; }
+
+        label { font-size: 0.85rem; font-weight: 600; color: $color-texto-oscuro; }
+
+        input, select, textarea {
+          @include form-input;
+          resize: vertical;
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: $spacing-sm;
+
+      .btn-guardar { @include btn-primary; }
+      .btn-cancelar { @include btn-ghost; }
+    }
+  }
+
+  .reuniones-lista {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  .reunion-card {
+    @include card;
+    padding: $spacing-lg;
+    display: flex;
+    gap: $spacing-lg;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .card-main {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+
+      .card-titulo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: $font-display;
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: $color-texto-oscuro;
+
+        svg { color: $color-primario; flex-shrink: 0; }
+      }
+
+      .card-tema { color: $color-texto-suave; font-size: 0.92rem; }
+
+      .card-acuerdos {
+        font-size: 0.88rem;
+        color: $color-texto-mutado;
+        background: $color-fondo-alt;
+        padding: 8px 12px;
+        border-radius: $radius-md;
+        line-height: 1.5;
+      }
+
+      .card-meta {
+        display: flex;
+        gap: $spacing-lg;
+        flex-wrap: wrap;
+        margin-top: 4px;
+
+        span {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          font-size: 0.82rem;
+          color: $color-texto-mutado;
+          svg { color: $color-primario; opacity: 0.7; }
+        }
+      }
+    }
+
+    .card-side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: $spacing-sm;
+
+      .btn-del {
+        width: 34px;
+        height: 34px;
+        border-radius: $radius-md;
+        border: 1px solid $color-borde;
+        background: $color-blanco;
+        color: $color-texto-suave;
+        cursor: pointer;
+        @include flex-center;
+        transition: $transition-fast;
+        &:hover { border-color: $color-error; color: $color-error; }
+      }
+    }
+  }
+
+  .estado-chip {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: $radius-full;
+    white-space: nowrap;
+
+    &.pendiente { background: rgba($color-advertencia, 0.14); color: $color-advertencia; }
+    &.realizada { background: rgba($color-exito, 0.14); color: $color-exito; }
+    &.cancelada { background: rgba($color-error, 0.12); color: $color-error; }
+  }
+
+  .reuniones-empty {
+    @include card;
+    padding: 60px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+    color: $color-texto-mutado;
+
+    .empty-icon { font-size: 3rem; opacity: 0.5; }
+  }
+}

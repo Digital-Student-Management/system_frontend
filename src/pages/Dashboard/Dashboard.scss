@@ -8,7 +8,11 @@
   flex-direction: column;
 }
 
-// Navbar Superior
+// =============================================================================
+// Navbar Superior — barra con menú de navegación adaptable.
+// En pantallas anchas los enlaces se muestran en línea; en pantallas más
+// pequeñas se colapsan en un menú desplegable (hamburguesa) para no desbordar.
+// =============================================================================
 .dashboard-navbar {
   height: $navbar-height;
   background-color: $color-blanco;
@@ -16,16 +20,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: $spacing-md;
   padding: 0 $spacing-lg;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 30;
   box-shadow: $shadow-sm;
 
   .navbar-logo {
     display: flex;
     align-items: center;
     gap: $spacing-sm;
+    flex-shrink: 0;
 
     .logo-icon {
       font-size: 1.8rem;
@@ -38,69 +44,125 @@
     .logo-text {
       font-family: $font-display;
       font-weight: 800;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       color: $color-primario;
       letter-spacing: -0.5px;
     }
   }
 
+  // Botón hamburguesa — oculto en escritorio, visible al colapsar
+  .navbar-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid $color-borde;
+    border-radius: $radius-md;
+    background-color: $color-blanco;
+    color: $color-texto;
+    font-size: 1.4rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color $transition-fast, color $transition-fast, border-color $transition-fast;
+
+    &:hover { border-color: $color-primario; color: $color-primario; }
+    &.is-open { background-color: $color-primario; border-color: $color-primario; color: $color-blanco; }
+  }
+
   .navbar-menu-links {
     display: flex;
     align-items: center;
-    gap: $spacing-md;
+    gap: 4px;
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+    overflow-x: auto;
+
+    // Oculta la barra de scroll pero mantiene el desplazamiento como último recurso
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
 
     .nav-link {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 16px;
+      padding: 8px 12px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: $color-texto-mutado;
       text-decoration: none;
       border-radius: $radius-md;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: background-color $transition-fast, color $transition-fast;
 
-      svg {
-        font-size: 1.1rem;
-      }
+      svg { font-size: 1.05rem; flex-shrink: 0; }
 
-      &:hover {
-        background-color: rgba($color-primario, 0.05);
-        color: $color-primario;
-      }
-
-      &.active {
-        background-color: rgba($color-primario, 0.08);
-        color: $color-primario;
-      }
+      &:hover { background-color: rgba($color-primario, 0.06); color: $color-primario; }
+      &.active { background-color: rgba($color-primario, 0.1); color: $color-primario; }
     }
   }
+
+  // Fondo oscuro tras el menú desplegable (solo en modo colapsado)
+  .navbar-backdrop { display: none; }
 
   .navbar-user-section {
     display: flex;
     align-items: center;
-    gap: $spacing-lg;
+    gap: $spacing-md;
+    flex-shrink: 0;
 
     .user-info {
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
+      align-items: center;
+      gap: $spacing-sm;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: $radius-md;
+      transition: background-color $transition-fast;
+
+      &:hover { background-color: $color-fondo-alt; }
+
+      .user-avatar-mini {
+        width: 38px;
+        height: 38px;
+        border-radius: $radius-full;
+        background-color: rgba($color-primario, 0.12);
+        color: $color-primario;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        flex-shrink: 0;
+      }
+
+      .user-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+      }
 
       .user-name {
         font-size: 0.9rem;
         font-weight: 600;
         color: $color-texto;
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .user-role-badge {
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         font-weight: 700;
-        padding: 2px 8px;
+        padding: 1px 8px;
         border-radius: $radius-full;
         text-transform: uppercase;
         letter-spacing: 0.3px;
-        margin-top: 2px;
 
         &.estudiante { background-color: rgba($color-secundario, 0.15); color: $color-secundario; }
         &.docente { background-color: rgba($color-primario, 0.15); color: $color-primario; }
@@ -116,69 +178,89 @@
       @include btn-ghost;
       padding: 6px 12px;
       font-size: 0.8rem;
-      height: 34px;
+      height: 38px;
       display: flex;
       align-items: center;
       gap: 6px;
 
       span {
-        @include tablet {
-          display: none; // Ocultar texto en móviles/tablets
-        }
+        @include tablet { display: none; } // Solo icono en pantallas pequeñas
       }
     }
   }
 
-  @media (max-width: 768px) {
-    display: grid;
-    grid-template-areas: 
-      "logo user"
-      "menu menu";
-    grid-template-columns: 1fr auto;
-    height: auto;
-    padding: $spacing-md;
-    gap: 12px;
-
-    .navbar-logo {
-      grid-area: logo;
-      
-      .logo-text {
-        font-size: 1.1rem;
-      }
+  // ───────────────────────────────────────────────────────────────────────────
+  // Modo colapsado: el menú se convierte en un panel desplegable
+  // ───────────────────────────────────────────────────────────────────────────
+  @media (max-width: 1400px) {
+    .navbar-toggle {
+      display: inline-flex;
+      order: 3; // hamburguesa al extremo derecho
     }
 
     .navbar-user-section {
-      grid-area: user;
-      gap: $spacing-sm;
-      
-      .user-info {
-        .user-name {
-          font-size: 0.8rem;
-        }
-      }
+      order: 2;
+      margin-left: auto; // empuja usuario + hamburguesa hacia la derecha
     }
 
     .navbar-menu-links {
-      grid-area: menu;
-      width: 100%;
-      overflow-x: auto;
-      white-space: nowrap;
+      order: 4;
+      position: absolute;
+      top: calc(100% + 1px);
+      right: $spacing-md;
+      width: 300px;
+      max-width: calc(100vw - #{$spacing-md} * 2);
+      flex-direction: column;
+      align-items: stretch;
       justify-content: flex-start;
-      padding-bottom: 4px;
-      gap: 6px;
-      
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      &::-webkit-scrollbar {
-        display: none;
+      gap: 2px;
+      background-color: $color-blanco;
+      border: 1px solid $color-borde;
+      border-radius: $radius-lg;
+      box-shadow: $shadow-lg;
+      padding: $spacing-sm;
+      overflow-y: auto;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      visibility: hidden;
+      transition: max-height 0.28s ease, opacity 0.2s ease, transform 0.2s ease;
+
+      &.open {
+        max-height: calc(100vh - #{$navbar-height} - #{$spacing-lg});
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+        visibility: visible;
       }
 
       .nav-link {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-        flex-shrink: 0;
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        gap: 12px;
+
+        svg { font-size: 1.2rem; color: $color-primario; }
       }
     }
+
+    .navbar-backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.35);
+      z-index: -1;
+    }
+  }
+
+  @include tablet {
+    padding: 0 $spacing-md;
+
+    .navbar-logo .logo-text { font-size: 1.05rem; }
+
+    .navbar-user-section .user-info .user-text { display: none; } // solo avatar en móvil
   }
 }
 

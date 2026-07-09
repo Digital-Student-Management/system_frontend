@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { FaSchool } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
@@ -10,7 +11,13 @@ import {
   FiUsers,
   FiAlertCircle,
   FiAward,
-  FiMail
+  FiMail,
+  FiGrid,
+  FiClipboard,
+  FiLayers,
+  FiHome,
+  FiMenu,
+  FiX
 } from 'react-icons/fi'
 import {
   BarChart,
@@ -28,6 +35,8 @@ import './Dashboard.scss'
 
 export default function Dashboard() {
   const { usuario, logout } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const cerrarMenu = () => setMenuOpen(false)
 
   // Datos mock para gráficos y widgets según rol
   const dataNotas = [
@@ -388,8 +397,19 @@ export default function Dashboard() {
           <span className="logo-text">Colegio Bernardo O'Higgins</span>
         </div>
 
-        <div className="navbar-menu-links">
-          <Link to="/" className="nav-link active">Inicio</Link>
+        {/* Botón hamburguesa (visible cuando el menú no cabe en línea) */}
+        <button
+          type="button"
+          className={`navbar-toggle ${menuOpen ? 'is-open' : ''}`}
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Abrir menú de navegación"
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? <FiX /> : <FiMenu />}
+        </button>
+
+        <div className={`navbar-menu-links ${menuOpen ? 'open' : ''}`} onClick={cerrarMenu}>
+          <Link to="/" className="nav-link active"><FiHome /> Inicio</Link>
           {(usuario.rol === 'DOCENTE' || usuario.rol === 'ADMIN') && (
             <Link to="/registro-notas" className="nav-link">
               <FiBookOpen /> Registrar Notas
@@ -400,19 +420,44 @@ export default function Dashboard() {
               <FiAward /> Mis Notas
             </Link>
           )}
+          {(usuario.rol === 'APODERADO' || usuario.rol === 'ESTUDIANTE' || usuario.rol === 'ADMIN') && (
+            <Link to="/mi-estudiante" className="nav-link">
+              <FiUsers /> {usuario.rol === 'APODERADO' ? 'Mi Pupilo' : 'Mi Ficha'}
+            </Link>
+          )}
+          <Link to="/mis-cursos" className="nav-link">
+            <FiLayers /> Cursos
+          </Link>
+          {(usuario.rol === 'DOCENTE' || usuario.rol === 'ADMIN') && (
+            <Link to="/bitacora-asignatura" className="nav-link">
+              <FiClipboard /> Bitácora
+            </Link>
+          )}
           <Link to="/anotaciones" className="nav-link">
             <FiFileText /> Anotaciones
+          </Link>
+          <Link to="/reuniones" className="nav-link">
+            <FiCalendar /> Reuniones
+          </Link>
+          <Link to="/mural" className="nav-link">
+            <FiGrid /> Mural
           </Link>
           <Link to="/mensajeria" className="nav-link">
             <FiMail /> Mensajería
           </Link>
         </div>
 
+        {/* Fondo semitransparente al abrir el menú en pantallas pequeñas */}
+        {menuOpen && <div className="navbar-backdrop" onClick={cerrarMenu} />}
+
         <div className="navbar-user-section">
-          <div className="user-info">
-            <span className="user-name">{usuario.nombre}</span>
-            <span className={`user-role-badge ${usuario.rol.toLowerCase()}`}>{usuario.rol}</span>
-          </div>
+          <Link to="/mi-perfil" className="user-info" title="Ver mi perfil">
+            <span className="user-avatar-mini"><FiUser /></span>
+            <span className="user-text">
+              <span className="user-name">{usuario.nombre}</span>
+              <span className={`user-role-badge ${usuario.rol.toLowerCase()}`}>{usuario.rol}</span>
+            </span>
+          </Link>
           <button type="button" className="btn-logout" onClick={logout} title="Cerrar Sesión">
             <FiLogOut />
             <span>Cerrar Sesión</span>
