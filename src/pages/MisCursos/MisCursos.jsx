@@ -15,11 +15,6 @@ import { getAll as getCursos } from '../../services/cursoService'
 import { getAll as getAsignaturas } from '../../services/asignaturaService'
 import './MisCursos.scss'
 
-/**
- * MisCursos — Vista de cursos y asignaturas.
- * Docentes ven destacados los cursos donde son Profesor Jefe; el resto
- * consulta el catálogo de cursos y asignaturas del establecimiento.
- */
 export default function MisCursos() {
   const { usuario } = useAuth()
   const [cursos, setCursos] = useState([])

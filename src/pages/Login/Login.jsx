@@ -52,8 +52,7 @@ export default function Login() {
     setValue('rut', formatearRut(rawValue), { shouldValidate: true })
   }
 
-  // Submit del formulario. La autenticación es SIEMPRE contra el backend real
-  // (ms-usuarios): no existe modo simulado ni bypass del lado del cliente.
+  // La autenticación se realiza siempre contra el backend (ms-usuarios).
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
@@ -197,9 +196,7 @@ export default function Login() {
                   className={errors.rol ? 'error' : ''}
                   disabled={isLoading}
                 >
-                  {/* Seguridad: el auto-registro público SOLO permite roles no privilegiados.
-                      Las cuentas de personal (docente, inspector, directivo, etc.) las crea
-                      un administrador; el backend rechaza cualquier otro rol en /auth/register. */}
+                  {/* El auto-registro solo permite Estudiante y Apoderado; el personal lo crea un administrador. */}
                   <option value="ESTUDIANTE">Estudiante</option>
                   <option value="APODERADO">Apoderado</option>
                 </select>

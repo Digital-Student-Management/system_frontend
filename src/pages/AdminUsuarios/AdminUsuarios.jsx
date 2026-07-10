@@ -34,8 +34,6 @@ export default function AdminUsuarios() {
 
   useEffect(() => { cargar() }, [])
 
-  // Crear usuario (incluye personal). Funciona porque el token del admin autenticado
-  // se adjunta automáticamente en axiosConfig y el backend autoriza roles privilegiados.
   const handleCrear = async (e) => {
     e.preventDefault()
     if (!form.nombreCompleto.trim() || !form.rut.trim() || !form.email.trim() || !form.password) {

@@ -15,13 +15,6 @@ import { useAuth } from '../../hooks/useAuth'
 import { getAll as getUsuarios } from '../../services/usuarioService'
 import './MiEstudiante.scss'
 
-/**
- * MiEstudiante — Ficha de estudiante(s).
- *  - APODERADO: ve a su(s) pupilo(s) (estudiantes cuyo idApoderado coincide).
- *  - ESTUDIANTE: ve su propia ficha.
- *  - DOCENTE / INSPECTOR / DIRECTIVO / ADMIN: directorio de estudiantes.
- * Los datos provienen de ms-usuarios (lista de usuarios con tipoUsuario).
- */
 export default function MiEstudiante() {
   const { usuario } = useAuth()
   const [estudiantes, setEstudiantes] = useState([])

@@ -17,11 +17,6 @@ import { useAuth } from '../../hooks/useAuth'
 import { getById } from '../../services/usuarioService'
 import './MiPerfil.scss'
 
-/**
- * MiPerfil — Ficha personal del usuario autenticado (solo lectura).
- * Combina los datos garantizados de la sesión con el detalle completo
- * traído desde ms-usuarios (incluye campos específicos según el rol).
- */
 export default function MiPerfil() {
   const { usuario } = useAuth()
   const [detalle, setDetalle] = useState(null)
@@ -45,7 +40,6 @@ export default function MiPerfil() {
     cargarPerfil()
   }, [usuario])
 
-  // Nombre para el avatar (iniciales)
   const iniciales = (usuario?.nombre || 'U')
     .split(' ')
     .filter(Boolean)
@@ -56,7 +50,6 @@ export default function MiPerfil() {
 
   const activo = (detalle?.estadoUsuario || 'ACTIVO').toUpperCase() === 'ACTIVO'
 
-  // Campos específicos según el tipo de usuario devuelto por el backend
   const camposEspecificos = () => {
     if (!detalle) return []
     switch (detalle.tipoUsuario) {

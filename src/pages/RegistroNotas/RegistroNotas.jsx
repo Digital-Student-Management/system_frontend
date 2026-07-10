@@ -270,8 +270,7 @@ export default function RegistroNotas() {
         toast.info('No se guardaron notas nuevas.')
       }
 
-      // Notificar cambio de nota (caso de uso «extend»): al modificar notas existentes,
-      // el sistema avisa que se notificará a apoderados/estudiantes del cambio.
+      // Al modificar notas existentes, se notifica el cambio a los apoderados.
       if (modificadas > 0) {
         toast.info(`🔔 Se notificó a los apoderados el cambio de ${modificadas} calificación(es).`)
       }

@@ -21,11 +21,6 @@ import './Reuniones.scss'
 
 const ESTADOS = ['PENDIENTE', 'REALIZADA', 'CANCELADA']
 
-/**
- * Reuniones — Gestión de reuniones del establecimiento (ms-reuniones).
- * Tres módulos: Citaciones individuales, Reuniones generales de curso y
- * Actas de reuniones internas de directivos.
- */
 export default function Reuniones() {
   const { usuario } = useAuth()
   const rol = usuario?.rol
@@ -49,7 +44,6 @@ export default function Reuniones() {
   const [editandoId, setEditandoId] = useState(null)
   const [filtroFecha, setFiltroFecha] = useState('')
 
-  // Carga de catálogos para los selectores
   useEffect(() => {
     const cargarCatalogos = async () => {
       try {
@@ -96,7 +90,6 @@ export default function Reuniones() {
 
   const abrirForm = () => {
     setEditandoId(null)
-    // Valores iniciales por pestaña
     if (tab === 'citaciones') {
       setForm({ estado: 'PENDIENTE', idDocente: usuario?.id, idEstudiante: '', idApoderado: '', temaEspEstudiante: '', acuerdosCompromisos: '' })
     } else if (tab === 'generales') {
@@ -205,7 +198,6 @@ export default function Reuniones() {
     <span className={`estado-chip ${(estado || 'pendiente').toLowerCase()}`}>{estado || 'PENDIENTE'}</span>
   )
 
-  // Filtrado por fecha (compara el prefijo YYYY-MM-DD del campo de fecha correspondiente)
   const filtrarPorFecha = (items, campoFecha) =>
     !filtroFecha ? items : items.filter((i) => String(i[campoFecha] || '').startsWith(filtroFecha))
   const citacionesF = filtrarPorFecha(citaciones, 'fechaProgramada')

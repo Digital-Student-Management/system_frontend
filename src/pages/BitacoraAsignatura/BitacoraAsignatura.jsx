@@ -29,10 +29,6 @@ const FORM_VACIO = {
   observaciones_generales: ''
 }
 
-/**
- * BitacoraAsignatura — Registro de clases (leccionario) por asignatura.
- * Restringida a Docentes y Administración. CRUD contra ms-asignaturas.
- */
 export default function BitacoraAsignatura() {
   const { usuario } = useAuth()
 

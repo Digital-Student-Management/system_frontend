@@ -24,10 +24,6 @@ const MODULOS = [
   { to: '/admin/salas', icon: <FiHome />, titulo: 'Salas', desc: 'Administra las salas y su capacidad máxima.' }
 ]
 
-/**
- * AdminPanel — Centro de administración. Muestra métricas globales y da
- * acceso a los módulos de gestión de datos maestros. Solo ADMIN y DIRECTIVO.
- */
 export default function AdminPanel() {
   const { usuario } = useAuth()
   const [stats, setStats] = useState({ usuarios: 0, cursos: 0, asignaturas: 0, salas: 0 })

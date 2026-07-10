@@ -398,7 +398,7 @@ export default function Dashboard() {
           <span className="logo-text">Colegio Bernardo O'Higgins</span>
         </div>
 
-        {/* Botón hamburguesa (visible cuando el menú no cabe en línea) */}
+        {/* Botón de menú (responsive) */}
         <button
           type="button"
           className={`navbar-toggle ${menuOpen ? 'is-open' : ''}`}
@@ -461,7 +461,6 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* Fondo semitransparente al abrir el menú en pantallas pequeñas */}
         {menuOpen && <div className="navbar-backdrop" onClick={cerrarMenu} />}
 
         <div className="navbar-user-section">

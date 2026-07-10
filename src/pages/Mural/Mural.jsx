@@ -23,11 +23,6 @@ import './Mural.scss'
 const NIVELES = ['INSTITUCION', 'CURSO', 'ASIGNATURA']
 const ROLES_PUBLICADORES = ['DOCENTE', 'INSPECTOR', 'DIRECTIVO', 'FUNCIONARIO', 'ADMIN']
 
-/**
- * Mural — Mural digital del establecimiento (ms-murales).
- * Todos los roles pueden leer; el personal del colegio puede publicar,
- * editar y eliminar comunicados.
- */
 export default function Mural() {
   const { usuario } = useAuth()
   const [publicaciones, setPublicaciones] = useState([])
